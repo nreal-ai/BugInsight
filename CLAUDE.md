@@ -1,11 +1,11 @@
-# NoBug Workspace
+# BugInsight
 
-Nreal 多仓库参考代码管理项目，用于集中维护 dove、ferrit、framework、heron、leopard、ov580_driver、project、sparrow 八个子仓库，配合 bug-analyzer 和 nreal-code 两个 Claude Code 技能进行日常开发和问题排查。
+AI 驱动的 Bug 分析工程。集中管理 NReal 八个子仓库参考代码（dove、ferrit、framework、heron、leopard、ov580_driver、project、sparrow），配合 bug-analyzer 和 nreal-code 两个 Claude Code 技能自动化分析缺陷根因。
 
 ## 目录结构
 
 ```
-NoBug/
+BugInsight/
 ├── .claude/
 │   ├── skills/
 │   │   ├── nreal-code/      # 仓库更新 + 提交记录查看
