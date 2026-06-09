@@ -273,7 +273,7 @@ python3 scripts/fetch_bugs.py --all
 
 通过 `add_comment` 追加评论时，content 支持以下格式：
 
-**@人员**（先用 `search_user_info` 获取 lark_user_id）：
+**@人员**（先用 `search_user_info` 获取 lark_user_id。注意：bug-analyzer 分析评论中禁止 @人员）：
 ```
 @张三<!-- mention:{"id":"lark_user_id_xxx","cn_name":"张三","blockType":"AT_USER_BLOCK"} -->
 ```

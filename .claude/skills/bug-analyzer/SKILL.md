@@ -65,18 +65,18 @@ python3 bug_analyzer.py search "USB连接异常"
   - `get_workitem_brief` - 获取缺陷概况
   - `list_workitem_field_config` - 获取字段配置
   - `get_download_url` - 获取附件下载链接
-- **禁止**调用 `list_workitem_comments`，分析必须独立于已有评论
+- **禁止**调用 `list_workitem_comments` 读取当前 Bug 的评论，分析必须独立于已有评论
+- 搜索相似缺陷时，可调用 `list_workitem_comments` 查看其他 Bug 的已有分析结论进行对比
 
 ### 方式5: 实时搜索相似缺陷
 - 用户说"帮我找相似的缺陷"或"搜索一下有没有类似问题"
 - 使用飞书 MCP 的 `search_by_mql` 在飞书项目中实时搜索:
   ```
-  search_by_mql(project_key="6762867be0f7868d8b44a719", mql="SELECT work_item_id, name FROM <空间名>.issue WHERE name LIKE '%关键词%' LIMIT 10")
+  search_by_mql(project_key="<project_key>", mql="SELECT work_item_id, name FROM <空间名>.issue WHERE name LIKE '%关键词%' LIMIT 10")
   ```
   - 空间名通过 `search_project_info` 获取
   - 缺陷类型通过 `list_workitem_types` 获取（通常是 `issue`）
-- 对匹配到的缺陷，用 `get_workitem_brief` 获取详情、`list_workitem_comments` 获取评论进行对比分析
-- 分析结果可以用 `add_comment` 添加评论回飞书缺陷
+- 对匹配到的**其他相似缺陷**，可调用 `list_workitem_comments` 查看已有分析结论进行对比（仅限相似缺陷，当前分析的 Bug 仍禁止参考评论）
 
 ## 核心原则：日志 + 代码 结合分析
 
@@ -119,6 +119,26 @@ python3 bug_analyzer.py search "USB连接异常"
 - **标题下方必须附带缺陷链接**，格式：`**缺陷链接**：[https://project.feishu.cn/{project_key}/issue/detail/{work_item_id}](https://project.feishu.cn/{project_key}/issue/detail/{work_item_id})`
 - **分析结论中不要写"缺陷概要"和"状态"等冗余信息**，直接从根因分析开始。标题已经包含缺陷链接，不需要在内容中重复缺陷名称和状态
 - **每条评论必须包含置信度评估**（步骤6），发现多个独立问题时分别给出置信度，格式参见 `references/analyze_prompt.md`
+
+## 重要规则：分析结果必须输出 Bug 信息
+
+> **每次分析完成后，必须在对话中输出一条摘要，包含 Bug 链接。** 无论手动模式还是自动模式，都要输出。
+
+输出格式：
+```
+✅ 分析完成
+| 项目 | 内容 |
+|------|------|
+| Bug ID | {work_item_id} |
+| 标题 | {bug_title} |
+| 链接 | [https://project.feishu.cn/{project_key}/issue/detail/{work_item_id}](https://project.feishu.cn/{project_key}/issue/detail/{work_item_id}) |
+| 置信度 | 🟢/🟡/🔴 (0.XX) |
+| 评论 | 已写入飞书（comment_id: xxx）/ 未添加 |
+```
+
+- **飞书链接格式**：`https://project.feishu.cn/{project_key}/issue/detail/{work_item_id}`
+- **{project_key}** 从 `get_workitem_brief` 返回的 `owned_project.simple_name` 获取
+- 自动模式下写 `已写入飞书`，手动模式下写 `未添加（等待确认）`
 
 ## 代码修改规则
 
