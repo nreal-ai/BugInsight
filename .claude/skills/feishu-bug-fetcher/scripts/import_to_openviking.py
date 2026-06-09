@@ -53,6 +53,11 @@ def load_config():
     if CONFIG_FILE.exists():
         with open(CONFIG_FILE) as f:
             cfg.update(json.load(f))
+    # 环境变量覆盖（优先于 config.json）
+    if os.getenv("FEISHU_PROJECT_KEY"):
+        cfg["project_key"] = os.getenv("FEISHU_PROJECT_KEY")
+    if os.getenv("FEISHU_MCP_TOKEN"):
+        cfg["mcp_user_token"] = os.getenv("FEISHU_MCP_TOKEN")
     return cfg
 
 CONFIG = load_config()
