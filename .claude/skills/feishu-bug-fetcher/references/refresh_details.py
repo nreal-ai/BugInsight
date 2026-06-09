@@ -22,7 +22,7 @@ except ImportError:
     print_config_check = None
 # 加载配置
 _fs_cfg = get_feishu_config() if get_feishu_config else {}
-PROJECT_KEY = _fs_cfg.get("project_key", "<FEISHU_PROJECT_KEY>")
+PROJECT_KEY = _fs_cfg.get("project_key", "<BUG_INSIGHT_FEISHU_PROJECT_KEY>")
 
 _ov_cfg = get_output_config() if get_output_config else {}
 OUTPUT_DIR = _ov_cfg.get("base_dir", os.path.expanduser("~/.openviking/workspace/feishu-bugs"))

@@ -59,11 +59,11 @@ def load_config() -> Dict:
             print(f"Warning: config.json 加载失败: {e}")
     # 环境变量覆盖
     for env_key, cfg_key in [
-        ("FEISHU_PROJECT_KEY", "project_key"),
-        ("FEISHU_MCP_TOKEN", "mcp_user_token"),
-        ("FEISHU_PLUGIN_ID", "plugin_id"),
-        ("FEISHU_PLUGIN_SECRET", "plugin_secret"),
-        ("FEISHU_USER_KEY", "user_key"),
+        ("BUG_INSIGHT_FEISHU_PROJECT_KEY", "project_key"),
+        ("BUG_INSIGHT_FEISHU_MCP_TOKEN", "mcp_user_token"),
+        ("BUG_INSIGHT_FEISHU_PLUGIN_ID", "plugin_id"),
+        ("BUG_INSIGHT_FEISHU_PLUGIN_SECRET", "plugin_secret"),
+        ("BUG_INSIGHT_FEISHU_USER_KEY", "user_key"),
     ]:
         val = os.getenv(env_key)
         if val:

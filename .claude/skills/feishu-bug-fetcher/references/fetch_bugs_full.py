@@ -94,10 +94,10 @@ if get_feishu_config:
     _fs_cfg = get_feishu_config()
 else:
     _fs_cfg = {
-        "project_key": "<FEISHU_PROJECT_KEY>",
-        "plugin_secret": "<FEISHU_PLUGIN_SECRET>",
-        "plugin_id": "<FEISHU_PLUGIN_ID>",
-        "user_key": "<FEISHU_USER_KEY>"
+        "project_key": "<BUG_INSIGHT_FEISHU_PROJECT_KEY>",
+        "plugin_secret": "<BUG_INSIGHT_FEISHU_PLUGIN_SECRET>",
+        "plugin_id": "<BUG_INSIGHT_FEISHU_PLUGIN_ID>",
+        "user_key": "<BUG_INSIGHT_FEISHU_USER_KEY>"
     }
 
 PROJECT_KEY = _fs_cfg.get("project_key", "")

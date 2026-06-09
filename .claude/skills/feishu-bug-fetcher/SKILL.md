@@ -182,8 +182,8 @@ import requests, os
 resp = requests.post(
     'https://project.feishu.cn/open_api/authen/plugin_token',
     json={
-        'plugin_id': os.environ['FEISHU_PLUGIN_ID'],
-        'plugin_secret': os.environ['FEISHU_PLUGIN_SECRET'],
+        'plugin_id': os.environ['BUG_INSIGHT_FEISHU_PLUGIN_ID'],
+        'plugin_secret': os.environ['BUG_INSIGHT_FEISHU_PLUGIN_SECRET'],
         'type': 0
     },
     timeout=10
@@ -193,7 +193,7 @@ token = resp.json()['data']['token']  # 有效期 ~5500 秒
 
 **Step 2 — Direct API DELETE**：
 ```python
-headers = {'x-plugin-token': token, 'x-user-key': os.environ['FEISHU_USER_KEY']}
+headers = {'x-plugin-token': token, 'x-user-key': os.environ['BUG_INSIGHT_FEISHU_USER_KEY']}
 url = f'https://project.feishu.cn/open_api/{project_key}/work_item/Bug/{work_item_id}/comment/{comment_id}'
 resp = requests.delete(url, headers=headers, timeout=10)
 # 成功返回 {"err_code": 0}
@@ -229,10 +229,10 @@ cp config-template.json config.json
 
 或通过环境变量：
 ```bash
-export FEISHU_PROJECT_KEY=sw_team
-export FEISHU_PLUGIN_ID=你的插件ID
-export FEISHU_PLUGIN_SECRET=你的插件密钥
-export FEISHU_USER_KEY=你的用户Key
+export BUG_INSIGHT_FEISHU_PROJECT_KEY=sw_team
+export BUG_INSIGHT_FEISHU_PLUGIN_ID=你的插件ID
+export BUG_INSIGHT_FEISHU_PLUGIN_SECRET=你的插件密钥
+export BUG_INSIGHT_FEISHU_USER_KEY=你的用户Key
 ```
 
 ### 用法
@@ -333,12 +333,106 @@ for bug in bugs:
 
 | 变量 | 说明 | 环境变量 | 默认值 |
 |------|------|----------|--------|
-| `project_key` | 飞书项目标识 | `FEISHU_PROJECT_KEY` | `sw_team` |
-| `mcp_user_token` | MCP 用户 Token | `FEISHU_MCP_TOKEN` | - |
-| `plugin_id` | 飞书插件 ID | `FEISHU_PLUGIN_ID` | - |
-| `plugin_secret` | 飞书插件密钥 | `FEISHU_PLUGIN_SECRET` | - |
-| `user_key` | 飞书用户 Key | `FEISHU_USER_KEY` | - |
+| `project_key` | 飞书项目标识 | `BUG_INSIGHT_FEISHU_PROJECT_KEY` | `sw_team` |
+| `mcp_user_token` | MCP 用户 Token | `BUG_INSIGHT_FEISHU_MCP_TOKEN` | - |
+| `plugin_id` | 飞书插件 ID | `BUG_INSIGHT_FEISHU_PLUGIN_ID` | - |
+| `plugin_secret` | 飞书插件密钥 | `BUG_INSIGHT_FEISHU_PLUGIN_SECRET` | - |
+| `user_key` | 飞书用户 Key | `BUG_INSIGHT_FEISHU_USER_KEY` | - |
 | `output_dir` | 数据输出目录 | `OUTPUT_BASE_DIR` | `~/.openviking/workspace/feishu-bugs` |
+
+## 自动分析模式（Bug Auto Analyzer）
+
+> **定时扫描飞书项目中的未分析 Bug，自动下载附件日志、搜索代码、分析根因、写入评论。**
+
+### 启动
+
+用户说 `启动自动分析`、`开启自动分析模式` 时触发。
+
+**执行步骤**：
+
+1. **切换模式**：更新 `bug-auto-analyzer-config` memory，将 `mode` 设为 `auto`。
+2. **创建 Cron 定时任务**：
+   ```
+   CronCreate(cron: "*/10 * * * *", prompt: "执行自动 Bug 分析扫描", recurring: true)
+   ```
+   每 10 分钟扫描一次。
+3. **立即触发首次扫描**：Cron 创建后，立即执行一次完整的分析扫描流程（不等待 10 分钟）。
+
+### 停止
+
+用户说 `停止自动分析`、`关闭自动分析` 时触发。
+
+1. 找到自动分析 Cron 任务 ID，调用 `CronDelete` 删除。
+2. 更新 memory 将 `mode` 切回 `manual`。
+
+### 扫描流程（Cron 触发时执行）
+
+每次 Cron 触发时按以下流程执行：
+
+#### 1. 读取配置
+
+从 `bug-auto-analyzer-config` memory 读取当前配置（项目列表、扫描参数、已分析 bug 列表）。
+
+#### 2. 查找未分析 Bug
+
+对每个启用的项目，用 MQL 查询状态为 `OPEN`/`IN PROGRESS`/`REOPENED` 的 Bug：
+
+```sql
+SELECT `work_item_id`, `name`, `priority`, `work_item_status`, `start_time`
+FROM `{project_key}`.`issue`
+WHERE `work_item_status` IN ('OPEN', 'IN PROGRESS', 'REOPENED')
+ORDER BY FIELD(`priority`, 'P0', 'P1', 'P2', '待定') ASC, `start_time` ASC
+LIMIT 50
+```
+
+#### 3. 过滤已分析 Bug
+
+- 对查询到的每个 Bug，用 `list_workitem_comments` 检查评论中是否包含 `分析来源于 AI`。
+- 包含 → 已分析过，跳过。同时加入 `analyzed_bugs` 列表。
+- 不包含 → 未分析，进入候选列表。
+
+#### 4. 选择目标 Bug
+
+按优先级 → 时间排序，选择第一个未分析的 Bug 作为本次分析目标。
+
+#### 5. 执行分析
+
+调用 `bug-analyzer` skill 的完整流程：
+
+1. `get_workitem_brief` + `fields` 参数获取详情（含附件字段 `multi_attachment`、`attachment` 等）
+2. 如有日志附件，下载解压分析
+3. 在 `nreal-code/` 中搜索相关代码
+4. 结合日志+代码给出根因结论
+5. 评估置信度
+
+#### 6. 写入评论
+
+调用 `add_comment` 将分析结论写入飞书，评论标题统一用：
+```
+## 🔍 AI分析结论 (by Claude Code + deepseek-v4-pro)
+```
+评论末尾加免责声明 `> ⚠️ 此分析来源于 AI（Claude Code + deepseek-v4-pro），仅供参考。`
+
+#### 7. 更新记录
+
+将分析完成的 Bug ID 追加到 `bug-auto-analyzer-config` memory 的 `analyzed_bugs` 列表，更新 `last_scan_time`。
+
+### 分析结论格式要求
+
+分析评论中：
+- **禁止 @ 任何人**
+- 标题统一：`## 🔍 AI分析结论 (by Claude Code + deepseek-v4-pro)`
+- 附带缺陷链接
+- 注明具体分析的是哪个日志文件
+- 包含置信度评估
+- 末尾加 AI 免责声明
+- 不重复缺陷概要和状态信息（直接从根因分析开始）
+
+### 并发控制
+
+- 每次 Cron 触发只分析 **1 个** Bug（`max_per_batch: 1`）。
+- 如果当前没有未分析的 Bug，本次触发静默跳过。
+- 如果上一个分析任务还在执行中（同一 Cron 任务重叠触发），新触发应检测并跳过，避免并发分析。
 
 ## 历史参考
 

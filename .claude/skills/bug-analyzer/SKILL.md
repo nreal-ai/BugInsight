@@ -65,6 +65,7 @@ python3 bug_analyzer.py search "USB连接异常"
   - `get_workitem_brief` - 获取缺陷概况
   - `list_workitem_field_config` - 获取字段配置
   - `get_download_url` - 获取附件下载链接
+- **`get_workitem_brief` 必须传入 `fields` 参数查询附件字段**（默认返回不包含文件附件）。至少查询：`["attachment", "multi_attachment", "field_d9e47e", "description"]`。优先用 `list_workitem_field_config` 的 `field_query="附件"` 获取当前空间下所有附件字段名，然后全部传入
 - **禁止**调用 `list_workitem_comments` 读取当前 Bug 的评论，分析必须独立于已有评论
 - 搜索相似缺陷时，可调用 `list_workitem_comments` 查看其他 Bug 的已有分析结论进行对比
 

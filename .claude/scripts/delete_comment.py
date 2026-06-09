@@ -5,9 +5,9 @@ import json
 import sys
 import os
 
-PLUGIN_ID = os.environ.get("FEISHU_PLUGIN_ID", "")
-PLUGIN_SECRET = os.environ.get("FEISHU_PLUGIN_SECRET", "")
-USER_KEY = os.environ.get("FEISHU_USER_KEY", "")
+PLUGIN_ID = os.environ.get("BUG_INSIGHT_FEISHU_PLUGIN_ID", "")
+PLUGIN_SECRET = os.environ.get("BUG_INSIGHT_FEISHU_PLUGIN_SECRET", "")
+USER_KEY = os.environ.get("BUG_INSIGHT_FEISHU_USER_KEY", "")
 
 
 def get_token():

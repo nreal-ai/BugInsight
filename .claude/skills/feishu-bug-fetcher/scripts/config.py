@@ -99,7 +99,7 @@ def load_config() -> Dict[str, Any]:
 def _resolve_env_refs(config: Dict) -> Dict:
     """递归解析配置中的 _env 后缀键。
     
-    将 {"mcp_key_env": "FEISHU_MCP_TOKEN"} 替换为 {"mcp_key": os.getenv("FEISHU_MCP_TOKEN")}
+    将 {"mcp_key_env": "BUG_INSIGHT_FEISHU_MCP_TOKEN"} 替换为 {"mcp_key": os.getenv("BUG_INSIGHT_FEISHU_MCP_TOKEN")}
     如果环境变量不存在则保留空字符串。
     """
     result = {}
@@ -107,7 +107,7 @@ def _resolve_env_refs(config: Dict) -> Dict:
         if isinstance(value, dict):
             result[key] = _resolve_env_refs(value)
         elif key.endswith('_env'):
-            # {"plugin_id_env": "FEISHU_PLUGIN_ID"} → {"plugin_id": os.getenv("FEISHU_PLUGIN_ID")}
+            # {"plugin_id_env": "BUG_INSIGHT_FEISHU_PLUGIN_ID"} → {"plugin_id": os.getenv("BUG_INSIGHT_FEISHU_PLUGIN_ID")}
             real_key = key[:-4]  # remove '_env'
             env_val = os.getenv(value, '')
             result[real_key] = env_val
@@ -140,18 +140,18 @@ def _apply_env_overrides(config: Dict) -> Dict:
         config["openviking"]["user"] = os.getenv("OV_USER")
     
     # 飞书 - 优先从环境变量读取敏感信息
-    if os.getenv("FEISHU_MCP_TOKEN"):
-        config["feishu"]["mcp_key"] = os.getenv("FEISHU_MCP_TOKEN")
-    elif os.getenv("FEISHU_MCP_KEY"):
-        config["feishu"]["mcp_key"] = os.getenv("FEISHU_MCP_KEY")
-    if os.getenv("FEISHU_PLUGIN_ID"):
-        config["feishu"]["plugin_id"] = os.getenv("FEISHU_PLUGIN_ID")
-    if os.getenv("FEISHU_PLUGIN_SECRET"):
-        config["feishu"]["plugin_secret"] = os.getenv("FEISHU_PLUGIN_SECRET")
-    if os.getenv("FEISHU_PROJECT_KEY"):
-        config["feishu"]["project_key"] = os.getenv("FEISHU_PROJECT_KEY")
-    if os.getenv("FEISHU_USER_KEY"):
-        config["feishu"]["user_key"] = os.getenv("FEISHU_USER_KEY")
+    if os.getenv("BUG_INSIGHT_FEISHU_MCP_TOKEN"):
+        config["feishu"]["mcp_key"] = os.getenv("BUG_INSIGHT_FEISHU_MCP_TOKEN")
+    elif os.getenv("BUG_INSIGHT_FEISHU_MCP_KEY"):
+        config["feishu"]["mcp_key"] = os.getenv("BUG_INSIGHT_FEISHU_MCP_KEY")
+    if os.getenv("BUG_INSIGHT_FEISHU_PLUGIN_ID"):
+        config["feishu"]["plugin_id"] = os.getenv("BUG_INSIGHT_FEISHU_PLUGIN_ID")
+    if os.getenv("BUG_INSIGHT_FEISHU_PLUGIN_SECRET"):
+        config["feishu"]["plugin_secret"] = os.getenv("BUG_INSIGHT_FEISHU_PLUGIN_SECRET")
+    if os.getenv("BUG_INSIGHT_FEISHU_PROJECT_KEY"):
+        config["feishu"]["project_key"] = os.getenv("BUG_INSIGHT_FEISHU_PROJECT_KEY")
+    if os.getenv("BUG_INSIGHT_FEISHU_USER_KEY"):
+        config["feishu"]["user_key"] = os.getenv("BUG_INSIGHT_FEISHU_USER_KEY")
     
     # 输出目录
     if os.getenv("OUTPUT_BASE_DIR"):
@@ -271,7 +271,7 @@ def print_config_check():
         print(f"\n请编辑配置文件: {CONFIG_FILE}")
         print("或设置环境变量:")
         print("  OV_API_KEY, OV_API_BASE, OV_ACCOUNT, OV_USER")
-        print("  FEISHU_PROJECT_KEY, FEISHU_PLUGIN_SECRET, FEISHU_PLUGIN_ID")
+        print("  BUG_INSIGHT_FEISHU_PROJECT_KEY, BUG_INSIGHT_FEISHU_PLUGIN_SECRET, BUG_INSIGHT_FEISHU_PLUGIN_ID")
         print("-" * 50)
         return False
     

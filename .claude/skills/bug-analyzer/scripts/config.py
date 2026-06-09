@@ -93,16 +93,16 @@ def apply_env_overrides(config: Dict) -> Dict:
         config["llm"]["model"] = os.getenv("LLM_MODEL")
 
     # 飞书 (备用, 飞书MCP已全局配置时不需要)
-    if os.getenv("FEISHU_PROJECT_KEY"):
-        config["feishu"]["project_key"] = os.getenv("FEISHU_PROJECT_KEY")
-    if os.getenv("FEISHU_PLUGIN_SECRET"):
-        config["feishu"]["plugin_secret"] = os.getenv("FEISHU_PLUGIN_SECRET")
-    if os.getenv("FEISHU_PLUGIN_ID"):
-        config["feishu"]["plugin_id"] = os.getenv("FEISHU_PLUGIN_ID")
-    if os.getenv("FEISHU_USER_KEY"):
-        config["feishu"]["user_key"] = os.getenv("FEISHU_USER_KEY")
-    if os.getenv("FEISHU_MCP_KEY"):
-        config["feishu"]["mcp_key"] = os.getenv("FEISHU_MCP_KEY")
+    if os.getenv("BUG_INSIGHT_FEISHU_PROJECT_KEY"):
+        config["feishu"]["project_key"] = os.getenv("BUG_INSIGHT_FEISHU_PROJECT_KEY")
+    if os.getenv("BUG_INSIGHT_FEISHU_PLUGIN_SECRET"):
+        config["feishu"]["plugin_secret"] = os.getenv("BUG_INSIGHT_FEISHU_PLUGIN_SECRET")
+    if os.getenv("BUG_INSIGHT_FEISHU_PLUGIN_ID"):
+        config["feishu"]["plugin_id"] = os.getenv("BUG_INSIGHT_FEISHU_PLUGIN_ID")
+    if os.getenv("BUG_INSIGHT_FEISHU_USER_KEY"):
+        config["feishu"]["user_key"] = os.getenv("BUG_INSIGHT_FEISHU_USER_KEY")
+    if os.getenv("BUG_INSIGHT_FEISHU_MCP_KEY"):
+        config["feishu"]["mcp_key"] = os.getenv("BUG_INSIGHT_FEISHU_MCP_KEY")
 
     return config
 

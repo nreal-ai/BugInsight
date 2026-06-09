@@ -54,10 +54,10 @@ def load_config():
         with open(CONFIG_FILE) as f:
             cfg.update(json.load(f))
     # 环境变量覆盖（优先于 config.json）
-    if os.getenv("FEISHU_PROJECT_KEY"):
-        cfg["project_key"] = os.getenv("FEISHU_PROJECT_KEY")
-    if os.getenv("FEISHU_MCP_TOKEN"):
-        cfg["mcp_user_token"] = os.getenv("FEISHU_MCP_TOKEN")
+    if os.getenv("BUG_INSIGHT_FEISHU_PROJECT_KEY"):
+        cfg["project_key"] = os.getenv("BUG_INSIGHT_FEISHU_PROJECT_KEY")
+    if os.getenv("BUG_INSIGHT_FEISHU_MCP_TOKEN"):
+        cfg["mcp_user_token"] = os.getenv("BUG_INSIGHT_FEISHU_MCP_TOKEN")
     return cfg
 
 CONFIG = load_config()
@@ -345,8 +345,8 @@ def main():
     global PROJECT_KEY
     if args.project:
         PROJECT_KEY = args.project
-    elif os.environ.get("FEISHU_PROJECT_KEY"):
-        PROJECT_KEY = os.environ["FEISHU_PROJECT_KEY"]
+    elif os.environ.get("BUG_INSIGHT_FEISHU_PROJECT_KEY"):
+        PROJECT_KEY = os.environ["BUG_INSIGHT_FEISHU_PROJECT_KEY"]
 
     if args.register_only:
         register_with_openviking()
