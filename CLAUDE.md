@@ -56,6 +56,6 @@ cd ~/.openviking && nohup python3 -m openviking.server.bootstrap --config ~/.ope
 
 ## 技术栈
 
-- **语言**: C/C++ (dove, ferrit, framework, heron, leopard, ov580_driver, project), Python (AI/ML, sparrow)
+- **语言**: C/C++ (dove, ferrit, framework, heron, leopard, ov580_driver, project, sparrow)
 - **构建**: CMake + Conan 2.0
 - **分支**: 统一使用 develop，ferrit 和 ov580_driver 含 submodule 会自动同步
