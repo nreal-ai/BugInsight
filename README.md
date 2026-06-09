@@ -125,6 +125,6 @@ BugInsight/
 ## 技术栈
 
 - **分析语言**: Python 3
-- **参考代码**: C/C++ (dove, ferrit, framework, heron, leopard, ov580_driver, project), Python (sparrow)
+- **参考代码**: C/C++ (dove, ferrit, framework, heron, leopard, ov580_driver, project, sparrow)
 - **构建系统**: CMake + Conan 2.0
 - **认证**: 飞书 Plugin Token + MCP Token
