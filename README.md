@@ -50,6 +50,18 @@ echo "dotenv" > .envrc && direnv allow
 /nreal-code 更新代码
 ```
 
+## 减少权限提示
+
+BugInsight 的技能在执行过程中会频繁下载附件、解压日志、调用飞书 MCP，默认情况下 Claude Code 会对这些操作逐一弹窗确认。为减少中断，**建议使用 `--dangerously-skip-permissions` 启动 Claude Code**：
+
+```bash
+claude --dangerously-skip-permissions
+```
+
+> ⚠️ 此选项会跳过所有权限弹窗。仅在信任仓库代码的场景下使用，确保你的 `.env` 和脚本配置来自可信来源。
+
+也可以在项目的 `.claude/settings.local.json` 中针对常用操作添加 allowlist，更精细地控制权限。详见 `/fewer-permission-prompts` 技能。
+
 ## 配置说明
 
 之前硬编码在 `delete_comment.py` 和 `config.json` 中的密钥已移至环境变量。各环境变量的用途：
