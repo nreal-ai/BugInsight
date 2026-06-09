@@ -1,0 +1,21 @@
+# 飞书缺陷获取器 - 配置文件
+# 复制此文件为 config.json 并填入实际值
+{
+    "project_key": "sw_team",
+    "mcp_user_token": "<m-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx>",
+    "output_dir": "~/.openviking/workspace/feishu-bugs",
+    "concurrency": {
+        "max_workers": 5,
+        "rate_limit": 10
+    },
+    "fetch": {
+        "page_size": 50,
+        "max_retries": 3,
+        "retry_interval": 2,
+        "request_timeout": 30
+    },
+    "incremental": {
+        "enabled": true,
+        "checkpoint_file": ".fetch_progress.json"
+    }
+}

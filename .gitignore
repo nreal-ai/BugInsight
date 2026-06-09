@@ -1,0 +1,24 @@
+# nreal-code 子仓库（参考代码，由 git clone 管理，不纳入本仓库）
+nreal-code/
+
+# Python 字节码
+__pycache__/
+*.pyc
+
+# 运行时锁文件
+.claude/scheduled_tasks.lock
+
+# 运行时状态文件
+.import_progress.json
+
+# 递归软链接产物
+.claude/skills/*/scripts/.claude/
+
+# 环境变量（含密钥，切勿提交）
+.env
+
+# 临时文件
+*.zip
+*.tmp
+.DS_Store
+Thumbs.db

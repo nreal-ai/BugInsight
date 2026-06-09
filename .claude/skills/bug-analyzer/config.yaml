@@ -1,0 +1,31 @@
+# Bug Analyzer 配置文件
+# 敏感信息请使用环境变量，不要写在配置文件中
+
+# LLM API 配置 (优先使用环境变量: LLM_API_BASE, LLM_API_KEY, LLM_MODEL)
+llm:
+  api_base: "https://litellm.xreal.work/v1"
+  api_key: ""  # 请设置环境变量 LLM_API_KEY
+  model: "qwen3-coder-plus"
+
+# NReal 代码仓库路径 (相对于 skill 目录)
+code_repos:
+  dove: "../../nreal-code/nreal-dove/"
+  framework: "../../nreal-code/nreal-framework/"
+  leopard: "../../nreal-code/nreal-leopard/"
+  sparrow: "../../nreal-code/nreal-sparrow/"
+  project: "../../nreal-code/nreal-project/"
+
+# 飞书项目配置 (使用飞书MCP时无需配置，此处仅作备用)
+feishu:
+  project_key: ""
+  plugin_secret: ""
+  plugin_id: ""
+  user_key: ""
+  mcp_key: ""
+
+# 分析配置
+analysis:
+  similar_bugs_limit: 10
+  code_search_limit: 20
+  llm_timeout: 90
+  confidence_threshold: 0.7

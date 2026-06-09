@@ -1,0 +1,37 @@
+concurrency:
+  max_workers: 5
+  rate_limit: 10
+projects:
+  - key: sw_team
+    name: SW Team
+    description: 软件团队缺陷（主）
+  - key: axr
+    name: AXR
+    description: XR 相关缺陷
+feishu:
+  mcp_key_env: FEISHU_MCP_TOKEN
+  plugin_id_env: FEISHU_PLUGIN_ID
+  plugin_secret_env: FEISHU_PLUGIN_SECRET
+  project_key_env: FEISHU_PROJECT_KEY
+  user_key_env: FEISHU_USER_KEY
+fetch:
+  attachments_page_size: 50
+  comments_page_size: 50
+  fetch_attachments: true
+  fetch_comments: true
+  fetch_details: true
+  max_retries: 3
+  request_timeout: 30
+  retry_interval: 2
+incremental:
+  checkpoint_file: .fetch_progress.json
+  enabled: true
+openviking:
+  account: default
+  api_base: http://127.0.0.1:1933
+  api_key: ov-dev-key-2026
+  user: xreal
+output:
+  attachments_dir: attachments
+  base_dir: ~/.openviking/workspace/feishu-bugs
+  reports_dir: reports
