@@ -22,11 +22,11 @@ cp .env.example .env
 编辑 `.env`：
 
 ```env
-FEISHU_PLUGIN_ID=你的插件ID
-FEISHU_PLUGIN_SECRET=你的插件密钥
-FEISHU_USER_KEY=你的用户Key
-FEISHU_MCP_TOKEN=你的MCP Token
-FEISHU_PROJECT_KEY=sw_team
+BUG_INSIGHT_FEISHU_PLUGIN_ID=你的插件ID
+BUG_INSIGHT_FEISHU_PLUGIN_SECRET=你的插件密钥
+BUG_INSIGHT_FEISHU_USER_KEY=你的用户Key
+BUG_INSIGHT_FEISHU_MCP_TOKEN=你的MCP Token
+BUG_INSIGHT_FEISHU_PROJECT_KEY=sw_team
 ```
 
 > `.env` 已被 `.gitignore` 排除，不会被提交到仓库。
@@ -109,11 +109,11 @@ tmux attach -t buginsight
 
 | 环境变量 | 必填 | 说明 |
 |---------|------|------|
-| `FEISHU_PLUGIN_ID` | 是 | 飞书项目插件 ID，用于获取 Plugin Token 调用 Direct API |
-| `FEISHU_PLUGIN_SECRET` | 是 | 飞书项目插件密钥 |
-| `FEISHU_USER_KEY` | 是 | 飞书用户 Key，作为 Direct API 请求的身份标识 |
-| `FEISHU_MCP_TOKEN` | 是 | MCP Server Token，用于 MCP 工具调用 |
-| `FEISHU_PROJECT_KEY` | 否 | 飞书项目标识，默认 `sw_team` |
+| `BUG_INSIGHT_FEISHU_PLUGIN_ID` | 是 | 飞书项目插件 ID，用于获取 Plugin Token 调用 Direct API |
+| `BUG_INSIGHT_FEISHU_PLUGIN_SECRET` | 是 | 飞书项目插件密钥 |
+| `BUG_INSIGHT_FEISHU_USER_KEY` | 是 | 飞书用户 Key，作为 Direct API 请求的身份标识 |
+| `BUG_INSIGHT_FEISHU_MCP_TOKEN` | 是 | MCP Server Token，用于 MCP 工具调用 |
+| `BUG_INSIGHT_FEISHU_PROJECT_KEY` | 否 | 飞书项目标识，默认 `sw_team` |
 
 所有脚本在加载配置时都会优先使用环境变量，其次才读取 `config.json` 中的占位符值。
 
