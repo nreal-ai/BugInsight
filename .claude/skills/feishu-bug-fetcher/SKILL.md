@@ -434,6 +434,13 @@ LIMIT 50
 
 将分析完成的 Bug ID 追加到 `bug-auto-analyzer-config` memory 的 `analyzed_bugs` 列表，更新 `last_scan_time`。
 
+#### 9. 输出 Bug 链接
+
+每次分析完成后，**必须**输出所分析 Bug 的链接，格式：
+```
+🔗 https://project.feishu.cn/{project_key}/issue/detail/{work_item_id}
+```
+
 ### 分析结论格式要求
 
 分析评论中：
