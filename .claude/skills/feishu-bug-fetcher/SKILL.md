@@ -373,9 +373,23 @@ for bug in bugs:
 
 从 `bug-auto-analyzer-config` memory 读取当前配置（项目列表、扫描参数、已分析 bug 列表）。
 
-#### 2. 查找未分析 Bug
+#### 2. 选择本轮项目（多项目轮转）
 
-对每个启用的项目，用 MQL 查询状态为 `OPEN`/`IN PROGRESS`/`REOPENED` 的 Bug：
+当多个项目启用时，**轮流分析**：每次扫描只对一个项目执行，下次切换到下一个启用项目，循环轮转。
+
+- 查看 `bug-auto-analyzer-config` memory 中的 `last_project` 字段。
+- 选择上次分析项目在启用列表中的**下一个**项目作为本轮目标。
+- 如果 `last_project` 不存在或为空，从启用列表的第一个项目开始。
+- 轮转示例（AXR + SW Team 均启用）：
+  - AXR → SW Team → AXR → SW Team → ...
+
+例如，当前启用项目为 `[axr, sw_team]`，`last_project = sw_team`，则本轮选择 `axr`。
+
+**选择完项目后，更新 memory 中的 `last_project` 为本轮所选项目**（确保下次 Cron 触发时切换到下一个）。
+
+#### 3. 查找未分析 Bug
+
+对**本轮选定的项目**，用 MQL 查询状态为 `OPEN`/`IN PROGRESS`/`REOPENED` 的 Bug：
 
 ```sql
 SELECT `work_item_id`, `name`, `priority`, `work_item_status`, `start_time`
@@ -385,17 +399,17 @@ ORDER BY FIELD(`priority`, 'P0', 'P1', 'P2', '待定') ASC, `start_time` ASC
 LIMIT 50
 ```
 
-#### 3. 过滤已分析 Bug
+#### 4. 过滤已分析 Bug
 
 - 对查询到的每个 Bug，用 `list_workitem_comments` 检查评论中是否包含 `分析来源于 AI`。
 - 包含 → 已分析过，跳过。同时加入 `analyzed_bugs` 列表。
 - 不包含 → 未分析，进入候选列表。
 
-#### 4. 选择目标 Bug
+#### 5. 选择目标 Bug
 
 按优先级 → 时间排序，选择第一个未分析的 Bug 作为本次分析目标。
 
-#### 5. 执行分析
+#### 6. 执行分析
 
 调用 `bug-analyzer` skill 的完整流程：
 
@@ -405,7 +419,7 @@ LIMIT 50
 4. 结合日志+代码给出根因结论
 5. 评估置信度
 
-#### 6. 写入评论
+#### 7. 写入评论
 
 调用 `add_comment` 将分析结论写入飞书，评论标题统一用：
 ```
@@ -413,7 +427,7 @@ LIMIT 50
 ```
 评论末尾加免责声明 `> ⚠️ 此分析来源于 AI（Claude Code + deepseek-v4-pro），仅供参考。`
 
-#### 7. 更新记录
+#### 8. 更新记录
 
 将分析完成的 Bug ID 追加到 `bug-auto-analyzer-config` memory 的 `analyzed_bugs` 列表，更新 `last_scan_time`。
 
@@ -431,7 +445,8 @@ LIMIT 50
 ### 并发控制
 
 - 每次 Cron 触发只分析 **1 个** Bug（`max_per_batch: 1`）。
-- 如果当前没有未分析的 Bug，本次触发静默跳过。
+- 多项目启用时采用**轮转策略**：每次只分析一个项目，下次切换到下一个启用的项目。
+- 如果当前选中的项目没有未分析的 Bug，本次触发静默跳过（不自动切换到下一个项目，保持轮转顺序）。
 - 如果上一个分析任务还在执行中（同一 Cron 任务重叠触发），新触发应检测并跳过，避免并发分析。
 
 ## 历史参考
