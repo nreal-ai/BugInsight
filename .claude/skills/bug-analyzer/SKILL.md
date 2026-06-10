@@ -66,7 +66,7 @@ python3 bug_analyzer.py search "USB连接异常"
   - `list_workitem_field_config` - 获取字段配置
   - `get_download_url` - 获取附件下载链接
 - **`get_workitem_brief` 必须传入 `fields` 参数查询附件字段**（默认返回不包含文件附件）。至少查询：`["attachment", "multi_attachment", "field_d9e47e", "description"]`。优先用 `list_workitem_field_config` 的 `field_query="附件"` 获取当前空间下所有附件字段名，然后全部传入
-- **禁止**调用 `list_workitem_comments` 读取当前 Bug 的评论，分析必须独立于已有评论
+- **可以**调用 `list_workitem_comments` 读取当前 Bug 的人工评论（参考排查方向、现象补充等），但**禁止**参考评论中其他 AI 工具的分析结论
 - 搜索相似缺陷时，可调用 `list_workitem_comments` 查看其他 Bug 的已有分析结论进行对比
 
 ### 方式5: 实时搜索相似缺陷
@@ -98,11 +98,13 @@ python3 bug_analyzer.py search "USB连接异常"
 
 ## 重要规则：分析独立性
 
-> **分析 Bug 时禁止参考该 Bug 中已有的评论内容。** 不要调用 `list_workitem_comments` 获取评论，也不要阅读任何已有评论。分析必须完全基于日志、代码和缺陷描述，确保结论不受他人观点影响。
+> **分析 Bug 时禁止参考该 Bug 中其他 AI 的分析结论。** 可参考人工评论中的信息（如日志分析、现象补充、排查方向等），但禁止参考其他 AI 工具生成的分析（如"AI分析 自动缺陷分析报告"等）。分析必须基于日志、代码、缺陷描述和人工评论，确保结论不受其他 AI 观点影响。
 
+- 可以调用 `list_workitem_comments` 获取评论，但仅参考**人工**评论（非 AI 生成的）
+- 人工评论中的日志截图、现象描述、排查结论等可作为分析输入
+- 其他 AI 的分析结论（标题含"AI分析"或内容来自 AI 工具）**禁止**参考
 - 只用 `get_workitem_brief` 获取缺陷描述、复现步骤、附件等基本信息
-- 不调用 `list_workitem_comments`（除非用户明确要求查看评论，而非分析 bug）
-- 分析结论必须来源于日志+代码的独立推理，不得引用或参考已有评论中的任何分析方向
+- 分析结论必须来源于日志+代码+人工评论的独立推理
 
 ## 重要规则：结论添加方式
 
