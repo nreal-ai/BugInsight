@@ -389,15 +389,18 @@ for bug in bugs:
 
 #### 3. 查找未分析 Bug
 
-对**本轮选定的项目**，用 MQL 查询状态为 `OPEN`/`IN PROGRESS`/`REOPENED` 的 Bug：
+对**本轮选定的项目**，用 MQL 查询状态为 `OPEN`/`IN PROGRESS`/`REOPENED` **且创建时间在最近三个月内**的 Bug：
 
 ```sql
 SELECT `work_item_id`, `name`, `priority`, `work_item_status`, `start_time`
 FROM `{project_key}`.`issue`
 WHERE `work_item_status` IN ('OPEN', 'IN PROGRESS', 'REOPENED')
+  AND RELATIVE_DATETIME_BETWEEN(`start_time`, 'past', '90d')
 ORDER BY FIELD(`priority`, 'P0', 'P1', 'P2', '待定') ASC, `start_time` ASC
 LIMIT 50
 ```
+
+> **时间窗口**：只分析最近 90 天（三个月）内创建的 Bug，超过三个月的 Bug 自动忽略。
 
 #### 4. 过滤已分析 Bug
 
