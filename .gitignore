@@ -1,5 +1,5 @@
 # nreal-code 子仓库（参考代码，由 git clone 管理，不纳入本仓库）
-nreal-code/
+/nreal-code/
 
 # Python 字节码
 __pycache__/
