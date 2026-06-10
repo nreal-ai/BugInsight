@@ -119,6 +119,13 @@ python3 bug_analyzer.py search "USB连接异常"
 - **评论标题统一用 `## 🔍 AI分析结论 (by Claude Code + deepseek-v4-pro)`**
 - **标题下方必须附带缺陷链接**，格式：`**缺陷链接**：[https://project.feishu.cn/{project_key}/issue/detail/{work_item_id}](https://project.feishu.cn/{project_key}/issue/detail/{work_item_id})`
 - **分析结论中不要写"缺陷概要"和"状态"等冗余信息**，直接从根因分析开始。标题已经包含缺陷链接，不需要在内容中重复缺陷名称和状态
+- **删除评论**：使用 `.claude/scripts/delete_comment.py` 脚本，凭证从 `.claude/settings.local.json` 环境变量中获取，一步完成：
+  ```bash
+  python3 .claude/scripts/delete_comment.py <project_key> issue <work_item_id> <comment_id>
+  ```
+  - 需提前设置环境变量 `BUG_INSIGHT_FEISHU_PLUGIN_ID`、`BUG_INSIGHT_FEISHU_PLUGIN_SECRET`、`BUG_INSIGHT_FEISHU_USER_KEY`（配置在 `.claude/settings.local.json` 中）
+  - `project_key` 用 `get_workitem_brief` 返回的 `owned_project.key`（如 `676e7fecad8e9de8735fa89f`），不是 `simple_name`
+  - 全自动执行，不弹窗确认
 - **每条评论必须包含置信度评估**（步骤6），发现多个独立问题时分别给出置信度，格式参见 `references/analyze_prompt.md`
 
 ## 自动分析模式
