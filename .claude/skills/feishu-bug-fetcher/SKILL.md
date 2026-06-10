@@ -21,12 +21,12 @@ description: |
 
 > **重要**：用户可能涉及多个飞书项目，查询 bug 时必须同时搜索所有项目，除非用户明确指定。
 
-| 项目标识 (project_key) | 项目名称 | 说明 |
-|------------------------|---------|------|
-| `sw_team` | SW Team | 软件团队缺陷（主） |
-| `axr` | AXR | XR 相关缺陷 |
+| 项目标识 (project_key) | 项目名称 | 代码仓库 | 说明 |
+|------------------------|---------|---------|------|
+| `axr` | AXR | dove, ferrit, framework, heron, leopard, project | XR 相关缺陷 |
+| `sw_team` | SW Team | framework, project, ov580_driver, sparrow | 软件团队缺陷（主） |
 
-**注意**：新项目接入时应补充到此列表。
+**注意**：新项目接入时应补充到此列表，并明确其代码仓库范围。
 
 **Claude Code 环境已配置**：`FeishuProjectMcp` MCP 服务器已在 `~/.claude.json` 中配置，包含 `MCP_USER_TOKEN`，可以直接调用以下工具：
 
@@ -418,7 +418,7 @@ LIMIT 50
 
 1. `get_workitem_brief` + `fields` 参数获取详情（含附件字段 `multi_attachment`、`attachment` 等）
 2. 如有日志附件，下载解压分析
-3. 在 `nreal-code/` 中搜索相关代码
+3. 在 `nreal-code/` 中**按项目对应的代码仓库**搜索相关代码（见[项目列表](#项目列表)中的"代码仓库"列）
 4. 结合日志+代码给出根因结论
 5. 评估置信度
 
