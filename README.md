@@ -62,6 +62,47 @@ claude --dangerously-skip-permissions
 
 也可以在项目的 `.claude/settings.local.json` 中针对常用操作添加 allowlist，更精细地控制权限。详见 `/fewer-permission-prompts` 技能。
 
+## 后台运行自动分析
+
+自动分析是会话级别的，退出 Claude Code 或断开终端后会自动停止。如需长时间后台运行，使用 **tmux**：
+
+### 安装 tmux
+
+```bash
+brew install tmux
+```
+
+### 核心操作
+
+```bash
+# 创建会话
+tmux new -s buginsight
+
+# 在里面启动自动分析
+cd ~/WorkSpace/BugInsight
+claude --dangerously-skip-permissions
+# → 启动自动分析
+
+# 脱离会话（后台继续跑）
+Ctrl+B，松开，再按 D
+
+# 下次 SSH 登录后重新连接
+tmux attach -t buginsight
+```
+
+### 常用命令速查
+
+| 操作 | 命令 |
+|------|------|
+| 创建新会话 | `tmux new -s 名字` |
+| 脱离会话 | `Ctrl+B` 然后 `D` |
+| 重新连接 | `tmux attach -t 名字` |
+| 查看所有会话 | `tmux ls` |
+| 杀掉会话 | `tmux kill-session -t 名字` |
+| 终端内滚动 | `Ctrl+B` 然后 `[`（方向键翻页，`q` 退出） |
+
+> **关键**：脱离时不要退出 Claude Code（`/exit` 或 `Ctrl+C`），而是用 `Ctrl+B D` 脱离整个 tmux 会话。这样 Claude Code 继续在后台运行，SSH 断开也不受影响。
+
 ## 配置说明
 
 之前硬编码在 `delete_comment.py` 和 `config.json` 中的密钥已移至环境变量。各环境变量的用途：
