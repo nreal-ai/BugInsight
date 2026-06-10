@@ -20,7 +20,8 @@ BugInsight/
     ├── nreal-leopard/       # 感知模块，分支 develop
     ├── nreal-ov580_driver/  # OV580 摄像头驱动 (含 submodule)，分支 develop
     ├── nreal-project/       # C++ 构建系统框架，分支 develop
-    └── nreal-sparrow/       # AI/ML 模块，分支 develop
+    ├── nreal-sparrow/       # AI/ML 模块，分支 develop
+    └── nrealUtil/           # 通用工具库，分支 develop
 ```
 
 ## 可用技能

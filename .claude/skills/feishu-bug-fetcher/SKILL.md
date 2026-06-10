@@ -23,8 +23,8 @@ description: |
 
 | 项目标识 (project_key) | 项目名称 | 代码仓库 | 说明 |
 |------------------------|---------|---------|------|
-| `axr` | AXR | dove, ferrit, framework, heron, leopard, project | XR 相关缺陷 |
-| `sw_team` | SW Team | framework, project, ov580_driver, sparrow | 软件团队缺陷（主） |
+| `axr` | AXR | dove, ferrit, framework, heron, leopard, project, util | XR 相关缺陷 |
+| `sw_team` | SW Team | framework, project, ov580_driver, sparrow, util | 软件团队缺陷（主） |
 
 **注意**：新项目接入时应补充到此列表，并明确其代码仓库范围。
 
@@ -409,7 +409,7 @@ LIMIT 50
 
 **2e. 执行分析**
 
-选第一个未分析 Bug，调用 `bug-analyzer` 完整流程。代码搜索限定该项目对应仓库（AXR→dove/ferrit/framework/heron/leopard/project；SW Team→framework/project/ov580_driver/sparrow）。
+选第一个未分析 Bug，调用 `bug-analyzer` 完整流程。代码搜索限定该项目对应仓库（AXR→dove/ferrit/framework/heron/leopard/project/util；SW Team→framework/project/ov580_driver/sparrow/util）。
 
 **2f. 写入评论**
 

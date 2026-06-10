@@ -2,7 +2,7 @@
 name: nreal-code
 description: |
   管理 nreal-code 目录下的代码仓库。支持更新仓库、查看最近 N 次提交记录（含作者和时间）。
-  可用仓库: dove, ferrit, framework, leopard, ov580_driver, project, sparrow, heron
+  可用仓库: dove, ferrit, framework, leopard, ov580_driver, project, sparrow, heron, util
   用法: 说"更新代码"、"更新 dove"、"查看 ferrit 最近 5 次提交"
 ---
 
@@ -23,6 +23,7 @@ description: |
 | project | `nreal-code/nreal-project/` | develop | C++ 构建系统框架 |
 | sparrow | `nreal-code/nreal-sparrow/` | develop | AI/ML 模块 |
 | heron | `nreal-code/nreal-heron/` | develop | 渲染引擎 (Flinger) |
+| util | `nreal-code/nrealUtil/` | develop | 通用工具库（协调、SlamConf 等） |
 
 ## 使用方法
 
@@ -87,6 +88,7 @@ afde4a4    | pengxianheng-nreal| 2026-04-29 18:05:23 | chore: update claude.md
 | sparrow | `nreal-code/nreal-sparrow/` | `/Users/apple/WorkSpace/nrsdk/sparrow` |
 | project | `nreal-code/nreal-project/` | `/Users/apple/WorkSpace/nrsdk/project` |
 | ov580_driver | `nreal-code/nreal-ov580_driver/` | `/Users/apple/WorkSpace/nrsdk/ov580_driver` |
+| util | `nreal-code/nrealUtil/` | `/Users/apple/WorkSpace/nrsdk/nrealUtil` |
 
 - 分析 Bug 时在 `nreal-code/` 中搜索和阅读代码
 - 修复 Bug 时在 `/Users/apple/WorkSpace/nrsdk/` 对应目录修改

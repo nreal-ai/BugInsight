@@ -213,6 +213,7 @@ python3 bug_analyzer.py search "USB连接异常"
 | sparrow | `nreal-code/nreal-sparrow/` | `/Users/apple/WorkSpace/nrsdk/sparrow` |
 | project | `nreal-code/nreal-project/` | `/Users/apple/WorkSpace/nrsdk/project` |
 | ov580_driver | `nreal-code/nreal-ov580_driver/` | `/Users/apple/WorkSpace/nrsdk/ov580_driver` |
+| util | `nreal-code/nrealUtil/` | `/Users/apple/WorkSpace/nrsdk/nrealUtil` |
 
 - 分析 Bug 时在 `nreal-code/` 中搜索和阅读代码
 - 修复 Bug 时在 `/Users/apple/WorkSpace/nrsdk/` 对应目录修改
@@ -244,7 +245,7 @@ python3 bug_analyzer.py search "USB连接异常"
 
 | 日志文件 | 打印来源 | 对应代码 |
 |---------|---------|---------|
-| `pilot.log` / `pilot.log.0` | Pilot 应用层（dove、ferrit、framework、heron、leopard、project） | ✅ 有源码，在 `nreal-code/` 下 |
+| `pilot.log` / `pilot.log.0` | Pilot 应用层（dove、ferrit、framework、heron、leopard、project、util） | ✅ 有源码，在 `nreal-code/` 下 |
 | `user.log` | 用户态系统日志 | ❌ BSP 层，无源码 |
 | `kernel.log` | Linux 内核日志（驱动、硬件异常等） | ❌ BSP 层，无源码 |
 | `messages` | 系统消息日志 | ❌ BSP 层，无源码 |
@@ -319,8 +320,8 @@ python3 bug_analyzer.py search "USB连接异常"
 
 | Bug 类型关键词 | 对应仓库 | 说明 |
 |---------------|---------|------|
-| pilot、眼镜、device、端侧 | dove, ferrit, framework, heron, leopard, project | 眼镜端侧固件/软件问题 |
-| host、主端、PC、电脑端 | ov580_driver, sparrow, project | 主机端驱动/软件问题 |
+| pilot、眼镜、device、端侧 | dove, ferrit, framework, heron, leopard, project, util | 眼镜端侧固件/软件问题 |
+| host、主端、PC、电脑端 | ov580_driver, sparrow, project, util | 主机端驱动/软件问题 |
 
 > **用法**: 当用户描述中包含上述关键词时，分析根因时优先在对应仓库中搜索相关代码和错误来源。
 
@@ -338,6 +339,7 @@ python3 bug_analyzer.py search "USB连接异常"
 | ov580_driver | OV580 摄像头驱动 | `nreal-code/nreal-ov580_driver/` |
 | sparrow | AI/ML 模块 | `nreal-code/nreal-sparrow/` |
 | project | C++ 构建系统框架 | `nreal-code/nreal-project/` |
+| util | 通用工具库（协调、SlamConf 等） | `nreal-code/nrealUtil/` |
 
 ### 关键目录
 
