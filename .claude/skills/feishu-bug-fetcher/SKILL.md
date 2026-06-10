@@ -353,7 +353,7 @@ for bug in bugs:
 1. **切换模式**：更新 `bug-auto-analyzer-config` memory，将 `mode` 设为 `auto`。
 2. **创建 Cron 定时任务**：
    ```
-   CronCreate(cron: "*/10 * * * *", prompt: "执行自动 Bug 分析扫描", recurring: true)
+   CronCreate(cron: "*/10 * * * *", prompt: "执行自动 Bug 分析扫描：读取配置，AXR↔SW Team 轮转，持续分析全部未分析 bug 直到无新 bug。30天窗口，代码按项目限定仓库。完成后等待下次触发。", recurring: true)
    ```
    每 10 分钟扫描一次。
 3. **立即触发首次扫描**：Cron 创建后，立即执行一次完整的分析扫描流程（不等待 10 分钟）。
@@ -367,79 +367,64 @@ for bug in bugs:
 
 ### 扫描流程（Cron 触发时执行）
 
-每次 Cron 触发时按以下流程执行：
+每次 Cron 触发时，**持续轮流分析两个项目的所有未分析 Bug，直到全部分析完为止**。然后等待下一个 Cron 周期（10 分钟后）重新扫描。
 
 #### 1. 读取配置
 
 从 `bug-auto-analyzer-config` memory 读取当前配置（项目列表、扫描参数、已分析 bug 列表）。
 
-#### 2. 选择本轮项目（多项目轮转）
+#### 2. 分析循环（持续到无未分析 Bug）
 
-当多个项目启用时，**轮流分析**：每次扫描只对一个项目执行，下次切换到下一个启用项目，循环轮转。
+重复以下步骤，直到 AXR 和 SW Team 两个项目都没有新的未分析 Bug：
 
-- 查看 `bug-auto-analyzer-config` memory 中的 `last_project` 字段。
-- 选择上次分析项目在启用列表中的**下一个**项目作为本轮目标。
-- 如果 `last_project` 不存在或为空，从启用列表的第一个项目开始。
-- 轮转示例（AXR + SW Team 均启用）：
-  - AXR → SW Team → AXR → SW Team → ...
+**2a. 选择本轮项目（轮转）**
 
-例如，当前启用项目为 `[axr, sw_team]`，`last_project = sw_team`，则本轮选择 `axr`。
+- 查看 `last_project`，选择启用列表中的**下一个**项目。
+- 首次从第一个启用项目开始。
+- 选择后立即更新 `last_project` 为所选项目。
 
-**选择完项目后，更新 memory 中的 `last_project` 为本轮所选项目**（确保下次 Cron 触发时切换到下一个）。
+**2b. 查找未分析 Bug**
 
-#### 3. 查找未分析 Bug
-
-对**本轮选定的项目**，用 MQL 查询状态为 `OPEN`/`IN PROGRESS`/`REOPENED` **且创建时间在最近三个月内**的 Bug：
+对**本轮选定项目**，MQL 查询相关 Bug：
 
 ```sql
 SELECT `work_item_id`, `name`, `priority`, `work_item_status`, `start_time`
 FROM `{project_key}`.`issue`
-WHERE `work_item_status` IN ('OPEN', 'IN PROGRESS', 'REOPENED')
+WHERE `work_item_status` IN ({项目对应状态})
   AND RELATIVE_DATETIME_BETWEEN(`start_time`, 'past', '30d')
-ORDER BY FIELD(`priority`, 'P0', 'P1', 'P2', '待定') ASC, `start_time` ASC
+ORDER BY `start_time` ASC
 LIMIT 50
 ```
 
-> **时间窗口**：只分析最近 30 天（一个月）内创建的 Bug，超过一个月的 Bug 自动忽略。
+> **时间窗口**：只分析最近 30 天（一个月）内创建的 Bug。
+> **状态标签**：AXR 用 `'OPEN', 'IN PROGRESS', 'REOPENED'`；SW Team 用 `'Open', 'In progress', 'Reopened'`。
 
-#### 4. 过滤已分析 Bug
+**2c. 过滤已分析**
 
-- 对查询到的每个 Bug，用 `list_workitem_comments` 检查评论中是否包含 `分析来源于 AI`。
-- 包含 → 已分析过，跳过。同时加入 `analyzed_bugs` 列表。
-- 不包含 → 未分析，进入候选列表。
+逐个检查评论是否包含 `分析来源于 AI`，有则跳过并加入 `analyzed_bugs`。
 
-#### 5. 选择目标 Bug
+**2d. 无未分析 Bug 则结束循环**
 
-按优先级 → 时间排序，选择第一个未分析的 Bug 作为本次分析目标。
+若当前项目无未分析 Bug，再检查另一个启用项目是否也没有。两个项目都没有 → **退出循环，等待下一个 Cron 周期**。
 
-#### 6. 执行分析
+**2e. 执行分析**
 
-调用 `bug-analyzer` skill 的完整流程：
+选第一个未分析 Bug，调用 `bug-analyzer` 完整流程。代码搜索限定该项目对应仓库（AXR→dove/ferrit/framework/heron/leopard/project；SW Team→framework/project/ov580_driver/sparrow）。
 
-1. `get_workitem_brief` + `fields` 参数获取详情（含附件字段 `multi_attachment`、`attachment` 等）
-2. 如有日志附件，下载解压分析
-3. 在 `nreal-code/` 中**按项目对应的代码仓库**搜索相关代码（见[项目列表](#项目列表)中的"代码仓库"列）
-4. 结合日志+代码给出根因结论
-5. 评估置信度
+**2f. 写入评论**
 
-#### 7. 写入评论
+`add_comment` 写入飞书，标题 `## 🔍 AI分析结论 (by Claude Code + deepseek-v4-pro)`，禁止@人，末尾加 `> ⚠️ 此分析来源于 AI（Claude Code + deepseek-v4-pro），仅供参考。`
 
-调用 `add_comment` 将分析结论写入飞书，评论标题统一用：
-```
-## 🔍 AI分析结论 (by Claude Code + deepseek-v4-pro)
-```
-评论末尾加免责声明 `> ⚠️ 此分析来源于 AI（Claude Code + deepseek-v4-pro），仅供参考。`
+**2g. 更新记录**
 
-#### 8. 更新记录
+将 Bug ID 追加到 `analyzed_bugs`，更新 `last_scan_time`。
 
-将分析完成的 Bug ID 追加到 `bug-auto-analyzer-config` memory 的 `analyzed_bugs` 列表，更新 `last_scan_time`。
-
-#### 9. 输出 Bug 链接
-
-每次分析完成后，**必须**输出所分析 Bug 的链接，格式：
+**2h. 输出链接**，格式：
 ```
 🔗 https://project.feishu.cn/{project_key}/issue/detail/{work_item_id}
 ```
+
+然后回到 **2a** 继续下一个项目。
 
 ### 分析结论格式要求
 
@@ -454,10 +439,11 @@ LIMIT 50
 
 ### 并发控制
 
-- 每次 Cron 触发只分析 **1 个** Bug（`max_per_batch: 1`）。
-- 多项目启用时采用**轮转策略**：每次只分析一个项目，下次切换到下一个启用的项目。
-- 如果当前选中的项目没有未分析的 Bug，本次触发静默跳过（不自动切换到下一个项目，保持轮转顺序）。
-- 如果上一个分析任务还在执行中（同一 Cron 任务重叠触发），新触发应检测并跳过，避免并发分析。
+- 每次 Cron 触发时，**持续分析直到两个项目都没有未分析 Bug**，然后等待下一个 Cron 周期。
+- 多项目采用**轮转策略**：AXR → SW Team → AXR → SW Team → ... 循环分析。
+- 如果 AXR 无未分析 Bug 但 SW Team 有，切换到 SW Team 继续；反之亦然。
+- 两个项目都没有未分析 Bug 时，退出循环，静默等待下一个 Cron 周期（10 分钟后重新扫描新 Bug）。
+- 如果上一个 Cron 任务还在执行中（重叠触发），新触发应检测并跳过。
 
 ## 历史参考
 
