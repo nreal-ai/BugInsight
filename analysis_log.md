@@ -11,7 +11,9 @@
 | 5 | 2026-06-10 19:32 | 6998668508 | IMU latency异常偏小 | 🟡 0.55 | ~1min | https://project.feishu.cn/axr/issue/detail/6998668508 |
 | 6 | 2026-06-10 19:32 | 6995743280 | 3dof校准后打开6dof画面跳变 | 🟢 0.85 | ~2min | https://project.feishu.cn/axr/issue/detail/6995743280 |
 
-- **AXR 小计**: 6 个 | 🟢 高: 3 | 🟡 中: 3
+| 8 | 2026-06-11 19:22 | 7016096596 | SteamDeck UAC切DP声音卡住黑屏 | 🟢 0.80 | ~2min | https://project.feishu.cn/axr/issue/detail/7016096596 |
+| 7 | 2026-06-11 19:21 | 7016142140 | NUC音量改变幅度为4预期为6 | 🟡 0.50 | ~1min | https://project.feishu.cn/axr/issue/detail/7016142140 |
+- **AXR 小计**: 8 个 | 🟢 高: 4 | 🟡 中: 4
 
 ## SW Team
 
@@ -53,5 +55,5 @@
 
 ---
 
-- **总计**: 37 个（AXR 6 + SW Team 31）
+- **总计**: 39 个（AXR 8 + SW Team 31）
 - **周期**: 2026-06-10 17:58 ~ 2026-06-11 15:44
