@@ -131,6 +131,10 @@ echo $GITHUB_TOKEN  # GitHub Token（代码搜索必需）
 - 附件 >15 个或 ZIP ≥3 个 → 跳过
 - **分析时禁止参考其他 AI 工具的评论**
 
+### 自续期
+
+每次 Cron 触发分析完成后，自动删除当前 Cron 并创建同名任务，重置 7 天过期倒计时，确保长期运行不会因过期而停止。
+
 ### 限制
 
 - **Session 内有效**：Cron 在 Claude Code session 结束时会停止
