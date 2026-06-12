@@ -1,0 +1,32 @@
+# 本地 clone 的代码仓库（不应提交）
+repositories/clones/
+
+# 运行时生成的数据文件（版本索引、缓存等）
+data/
+
+# Python cache (全目录)
+__pycache__/
+*.pyc
+*.pyo
+
+# 临时文件
+*.tmp
+*.log
+*.pid
+*.egg-info/
+
+# 环境变量文件
+.env
+.env.*
+
+# 运行时临时分析文件（通常生成在 /tmp/，但防止误放）
+bug_*_analysis_*.json
+bug_*_full.json
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
