@@ -89,6 +89,7 @@ echo $GITHUB_TOKEN  # GitHub Token（代码搜索必需）
   - 等级：🟢 高 (≥80%) | 🟡 中 (60%-79%) | 🔴 低 (<60%)
 - 必须包含「证据链」章节（直接证据 / 间接证据 / 辅助证据）
 - 末尾标注：`> ⚠️ 此分析来源于 AI（Claude Code + {模型名称}），仅供参考。`
+- **分析完成后，必须在控制台输出缺陷链接**：`https://project.feishu.cn/{project_key}/issue/detail/{work_item_id}`
 
 完整格式规范见 `references/report-format.md`。
 
@@ -115,7 +116,7 @@ echo $GITHUB_TOKEN  # GitHub Token（代码搜索必需）
      recurring: true
    )
    ```
-3. Cron 触发时 Claude 直接用 MCP 工具执行全流程：MQL 查询 → 附件下载 → 代码搜索 → 分析 → 写评论 → **更新 AI分析 字段为 SDK**
+3. Cron 触发时 Claude 直接用 MCP 工具执行全流程：MQL 查询 → 附件下载 → 代码搜索 → 分析 → 写评论 → **更新 AI分析 字段为 SDK** → **控制台输出缺陷链接**
 
 ### 停止
 
