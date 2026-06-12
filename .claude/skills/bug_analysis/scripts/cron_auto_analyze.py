@@ -23,7 +23,8 @@ from datetime import datetime
 from pathlib import Path
 
 # Redirect stdout to output file so cron Agent always reads fresh data
-OUTPUT_PATH = "/tmp/cron_auto_analyze_last_output.txt"
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_PATH = os.path.join(_script_dir, ".cron_auto_analyze_last_output.txt")
 _tee_file = open(OUTPUT_PATH, "w", encoding="utf-8")
 _orig_stdout = sys.stdout
 
@@ -54,19 +55,19 @@ PROJECT_KEYS = ["sw_team", "676e7fecad8e9de8735fa89f"]
 ANALYSIS_TIMEOUT = 900  # 15 min per bug — enough for LLM (2 rounds × ~300s) + API calls
 MAX_ATTACHMENTS_THRESHOLD = 15  # skip analysis for bugs with more attachments (too slow)
 SKIP_ZIP_THRESHOLD = 3  # bugs with 3+ zip files are skipped entirely
-RETRY_FILE = "/tmp/.cron_auto_analyze_retry.json"  # track failed bugs for retry
+RETRY_FILE = os.path.join(_script_dir, ".cron_auto_analyze_retry.json")  # track failed bugs for retry
 MAX_RETRY_ATTEMPTS = 2  # max retries per bug before giving up
 COMMENT_TIMEOUT = 30
 FETCH_TIMEOUT = 60
 FETCH_PAGE_SIZE = 50  # bugs per page when paginating
 FETCH_MAX_PAGES = 30  # safety limit (50 × 30 = 1500 bugs max per project)
-ANALYSIS_OUTPUT_DIR = "/tmp"
+ANALYSIS_OUTPUT_DIR = os.path.join(_script_dir, "output")
 OV_API_BASE = "http://127.0.0.1:1933"
 OV_HEADERS = {"X-OpenViking-Account": "default", "X-OpenViking-User": "admin"}
 OV_IMPORT_DIR = os.path.expanduser("~/.openviking/workspace/feishu-bugs/ov_import_closed/")
 OV_ARCHIVED_PATH = os.path.expanduser("~/.openviking/workspace/feishu-bugs/.ov_archived.json")
 # Cron run log: append each run's summary for history
-CRON_RUN_LOG = "/tmp/cron_auto_analyze_history.log"
+CRON_RUN_LOG = os.path.join(_script_dir, ".cron_auto_analyze_history.log")
 
 
 # Import MCP client functions (replaces mcporter CLI)

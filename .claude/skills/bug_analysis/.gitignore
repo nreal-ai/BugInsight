@@ -30,3 +30,7 @@ bug_*_full.json
 *.swo
 .DS_Store
 Thumbs.db
+.cron_auto_analyze_last_output.txt
+.cron_auto_analyze_retry.json
+.cron_auto_analyze_history.log
+output/
