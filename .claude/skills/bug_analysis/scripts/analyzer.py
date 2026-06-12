@@ -3140,6 +3140,13 @@ class BugAnalyzer:
                         score += 0.5
                         break
 
+            # 眼镜端核心日志文件加分（pilot.log 和 user.log 是眼镜端最重要的两个日志）
+            primary_glasses_logs = ['pilot.log', 'user.log']
+            for primary_log in primary_glasses_logs:
+                if name_lower.endswith(primary_log) or f'/{primary_log}' in name_lower:
+                    score += 0.3  # 高于普通 crash 关键词的 0.2
+                    break
+
             # 文件名加分
             for kw in crash_patterns:
                 if kw.lower() in name_lower:
