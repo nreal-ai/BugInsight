@@ -125,9 +125,11 @@ echo $GITHUB_TOKEN  # GitHub Token（代码搜索必需）
 
 ### 跳过规则
 
-- 评论含 `by Claude Code` → 已分析过，跳过
+- 评论含 `AI分析结论 (by Claude Code` → 已分析过，跳过
+- **注意**：其他 AI 工具（如"AI分析 自动缺陷分析报告"）分析过的不算已分析，仍需本工具分析
 - 已在 `analyzed_bugs` 列表中 → 跳过
 - 附件 >15 个或 ZIP ≥3 个 → 跳过
+- **分析时禁止参考其他 AI 工具的评论**
 
 ### 限制
 
