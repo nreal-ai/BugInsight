@@ -208,6 +208,34 @@ def mcp_get_download_url(project_key: str, work_item_id: str, file_url: str, tim
     return None
 
 
+def mcp_update_field(project_key: str, work_item_id: str, field_key: str, field_value: str, timeout: int = 15) -> Tuple[bool, str]:
+    """通过 MCP JSON-RPC 更新飞书工作项字段值。
+
+    Args:
+        project_key: 飞书空间标识
+        work_item_id: 工作项 ID
+        field_key: 字段 key（如 field_d381f5）
+        field_value: 字段值（JSON 字符串格式，由调用方负责序列化）
+        timeout: 超时秒数
+
+    Returns:
+        (success, detail) — success 为 True 时 detail 是成功信息，
+        success 为 False 时 detail 是错误信息。
+    """
+    result, err = mcp_call(
+        "update_field",
+        {
+            "project_key": project_key,
+            "work_item_id": work_item_id,
+            "fields": [{"field_key": field_key, "field_value": field_value}],
+        },
+        timeout=timeout,
+    )
+    if err:
+        return False, f"Failed: {err}"
+    return True, str(result)
+
+
 def parse_moql_field_list(moql_field_list: list) -> dict:
     """解析 MQL search_by_mql 返回的 moql_field_list 为平铺字典。"""
     fields = {}

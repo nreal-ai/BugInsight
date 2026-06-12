@@ -23,6 +23,13 @@ Feishu Bug (Direct API + MCP)
            │
            ▼
 ┌─────────────────────────────────────────────┐
+│  Claude Code (post-script)                  │
+│  7. add_comment(分析报告)                    │
+│  8. update_field(AI分析=SDK)                 │
+└─────────────────────────────────────────────┘
+           │
+           ▼
+┌─────────────────────────────────────────────┐
 │  analyzer.py::full_analysis()              │
 │  - detect_platform(glasses/host)           │
 │  - extract_versions()                      │

@@ -810,6 +810,7 @@ def main():
     feishu_parser.add_argument("input", help="飞书缺陷链接或 ID")
     feishu_parser.add_argument("--llm", action="store_true", help="启用 LLM 增强分析")
     feishu_parser.add_argument("--git-url", nargs="+", help="Git 仓库 URL 列表，用于代码搜索（按需克隆到临时目录）")
+    feishu_parser.add_argument("-p", "--project", help="飞书项目 Key（如 axr, sw_team），用于分析完成后更新 AI分析 字段")
     feishu_parser.set_defaults(func="feishu")
 
     # report 子命令
