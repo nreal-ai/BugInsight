@@ -15,11 +15,11 @@ openviking:
   user: "admin"
 
 feishu:
-  project_key_env: FEISHU_PROJECT_KEY
-  mcp_key_env: FEISHU_MCP_TOKEN
-  plugin_id_env: FEISHU_PLUGIN_ID
-  plugin_secret_env: FEISHU_PLUGIN_SECRET
-  user_key_env: FEISHU_USER_KEY
+  project_key_env: BUG_INSIGHT_FEISHU_PROJECT_KEY
+  mcp_key_env: BUG_INSIGHT_FEISHU_MCP_TOKEN
+  plugin_id_env: BUG_INSIGHT_FEISHU_PLUGIN_ID
+  plugin_secret_env: BUG_INSIGHT_FEISHU_PLUGIN_SECRET
+  user_key_env: BUG_INSIGHT_FEISHU_USER_KEY
 
 output:
   base_dir: "~/.openviking/workspace/feishu-bugs"
