@@ -11,9 +11,6 @@ __pycache__/
 # 运行时状态文件
 .import_progress.json
 
-# feishu-bug-fetcher 缓存数据
-.claude/skills/feishu-bug-fetcher/~/
-
 # 递归软链接产物
 .claude/skills/*/scripts/.claude/
 
