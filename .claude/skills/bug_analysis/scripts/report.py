@@ -907,6 +907,9 @@ def generate_feishu_report(analysis_result: Dict, bug_info: Dict = None) -> str:
 • 警告：{log_analysis.get('warning_count', 0)}
 • 错误码：{code_str}
 
+■ 分析耗时
+{analysis_result.get('analysis_duration_str', '未知')}
+
 ■ 解决方案
 {suggestion}
 

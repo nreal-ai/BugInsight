@@ -379,6 +379,9 @@ class BugAnalyzerCLI:
 
     def cmd_feishu(self, args):
         """从本地数据获取飞书缺陷并分析"""
+        import time
+        analysis_start_time = time.time()
+
         bug_input = args.input
         # 解析 ID：支持纯数字或 URL
         bug_id = bug_input.strip()
@@ -572,6 +575,15 @@ class BugAnalyzerCLI:
 
         # Show results
         self._print_analysis_result(result)
+
+        # Calculate analysis duration
+        elapsed = time.time() - analysis_start_time
+        hours = int(elapsed // 3600)
+        minutes = int((elapsed % 3600) // 60)
+        seconds = int(elapsed % 60)
+        result['analysis_duration_seconds'] = round(elapsed, 1)
+        result['analysis_duration_str'] = f"{hours}小时{minutes}分{seconds}秒"
+        print(f"\n⏱ 分析耗时: {result['analysis_duration_str']}")
 
         # Save
         _ensure_output_dir()
