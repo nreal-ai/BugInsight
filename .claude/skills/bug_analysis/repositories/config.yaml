@@ -1,0 +1,64 @@
+# Code repository configuration for bug-analyzer
+# 主要代码来源：项目根目录 nreal-code/（由 nreal-code skill 统一管理）
+# 以下配置仅用于 nreal-code/ 中不存在的仓库 (xr_codec, nrsdkrepo) 的 auto-clone。
+# Git URLs for automatic shallow-clone on first use.
+# Tokens are read from GITHUB_USER and GITHUB_TOKEN env vars.
+# DO NOT commit this file with real credentials — placeholders are resolved at runtime.
+
+repositories:
+  project:
+    url_template: "https://{GITHUB_USER}:{GITHUB_TOKEN}@github.com/nreal-ai/project.git"
+    branch: master
+  dove:
+    url_template: "https://{GITHUB_USER}:{GITHUB_TOKEN}@github.com/nreal-ai/dove.git"
+    branch: master
+  framework:
+    url_template: "https://{GITHUB_USER}:{GITHUB_TOKEN}@github.com/nreal-ai/framework.git"
+    branch: main
+  leopard:
+    url_template: "https://{GITHUB_USER}:{GITHUB_TOKEN}@github.com/nreal-ai/leopard.git"
+    branch: master
+  sparrow:
+    url_template: "https://{GITHUB_USER}:{GITHUB_TOKEN}@github.com/nreal-ai/sparrow.git"
+    branch: master
+  nrealUtil:
+    url_template: "https://{GITHUB_USER}:{GITHUB_TOKEN}@github.com/nreal-ai/nrealUtil.git"
+    branch: master
+  heron:
+    url_template: "https://{GITHUB_USER}:{GITHUB_TOKEN}@github.com/nreal-ai/heron.git"
+    branch: master
+  xr_codec:
+    url_template: "https://{GITHUB_USER}:{GITHUB_TOKEN}@github.com/nreal-ai/xr_codec.git"
+    branch: master
+  nrsdkrepo:
+    url_template: "https://{GITHUB_USER}:{GITHUB_TOKEN}@github.com/nreal-ai/nrsdkrepo.git"
+    branch: master
+
+# 平台仓库分组：分析 bug 时根据平台只使用相关仓库，减少无用代码搜索。
+# glasses (眼镜端): 使用 xrlinux*.xml / release.xrl 中定义的仓库
+# host (主机端): 使用 android.xml / release.xml 中定义的仓库
+# 如果 manifest 文件不存在，使用下方 fallback 列表。
+platform_repos:
+  glasses:
+    manifest_patterns: ["xrlinux*.xml", "xrlinux_manifest.xml", "release.xrl", "manifest_xrlinux.xml"]
+    fallback_repos:
+      - nrealUtil
+      - heron
+      - xr_codec
+      - nrsdkrepo
+      - dove
+      - leopard
+      - sparrow
+      - framework
+  host:
+    manifest_patterns: ["android.xml", "android_manifest.xml", "manifest_android.xml", "release.xml", "default.xml"]
+    fallback_repos:
+      - project
+      - framework
+      - dove
+      - leopard
+      - sparrow
+
+clone:
+  depth: 1
+  timeout: 120

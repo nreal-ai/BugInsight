@@ -2,14 +2,14 @@
 name: nreal-code
 description: |
   管理 nreal-code 目录下的代码仓库。支持更新仓库、查看最近 N 次提交记录（含作者和时间）。
-  可用仓库: dove, ferrit, framework, leopard, ov580_driver, project, sparrow, heron, util
+  可用仓库: dove, ferrit, framework, leopard, ov580_driver, project, sparrow, heron, util, xr_codec, nrsdkrepo
   用法: 说"更新代码"、"更新 dove"、"查看 ferrit 最近 5 次提交"
 ---
 
 # Nreal Code Manager
 
 > 管理本地 nreal-code 参考代码仓库，支持更新远程同步、查看提交记录。
-> 所有仓库统一更新到 develop 分支。ferrit 包含 submodule，会自动同步。
+> 除 nrsdkrepo 使用 master 分支外，其余仓库统一更新到 develop 分支。ferrit 和 ov580_driver 包含 submodule，会自动同步。
 
 ## 可用仓库
 
@@ -24,6 +24,8 @@ description: |
 | sparrow | `nreal-code/nreal-sparrow/` | develop | AI/ML 模块 |
 | heron | `nreal-code/nreal-heron/` | develop | 渲染引擎 (Flinger) |
 | util | `nreal-code/nrealUtil/` | develop | 通用工具库（协调、SlamConf 等） |
+| xr_codec | `nreal-code/nreal-xr_codec/` | develop | XR 编解码模块 |
+| nrsdkrepo | `nreal-code/nreal-nrsdkrepo/` | master | NRSDK 构建 manifest 仓库 |
 
 ## 使用方法
 

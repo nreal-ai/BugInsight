@@ -1,0 +1,29 @@
+# bug-analyzer 配置文件
+# 敏感值通过 _env 后缀从环境变量加载（优先 BUG_INSIGHT_* 前缀，fallback FEISHU_* 前缀）
+
+llm:
+  api_base_env: LLM_BASE_URL
+  model: "deepseek-v4-pro"
+  api_key_env: LLM_API_KEY
+  max_tokens: 4096
+  temperature: 0.3
+
+openviking:
+  api_base: "http://127.0.0.1:1933"
+  api_key_env: OPENVIKING_API_KEY
+  account: "default"
+  user: "admin"
+
+feishu:
+  project_key_env: FEISHU_PROJECT_KEY
+  mcp_key_env: FEISHU_MCP_TOKEN
+  plugin_id_env: FEISHU_PLUGIN_ID
+  plugin_secret_env: FEISHU_PLUGIN_SECRET
+  user_key_env: FEISHU_USER_KEY
+
+output:
+  base_dir: "~/.openviking/workspace/feishu-bugs"
+
+concurrency:
+  max_workers: 5
+  rate_limit: 10
