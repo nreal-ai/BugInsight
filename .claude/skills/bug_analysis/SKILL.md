@@ -34,7 +34,9 @@ echo $GITHUB_TOKEN  # GitHub Token（代码搜索必需）
 
 **触发**：用户说"分析飞书缺陷 7007264060" 或 "analyze bug 7007264060 in sw_team"
 
-### 快速流程
+### 快速流程（Python 脚本）
+
+当 LLM_API_KEY 等环境变量配置完整时，优先使用 Python 脚本：
 
 1. **获取 Bug 基本信息**（可选，用于展示给用户）：
    ```
@@ -51,16 +53,46 @@ echo $GITHUB_TOKEN  # GitHub Token（代码搜索必需）
    ```
    mcp__FeishuProjectMcp__add_comment(work_item_id="<bug_id>", project_key="sw_team", content="<分析报告>")
    ```
-   **评论格式要求**：
-   - 标题必须为：`## 🔍 AI分析结论 (by Claude Code + {模型名称})`
-   - 模型名称从 `config.yaml` 的 `llm.model` 读取（如 `deepseek-v4-pro`）
-   - 必须包含置信度评估章节，格式见 `references/report-format.md`
-   - 末尾标注：`> ⚠️ 此分析来源于 AI（Claude Code + {模型名称}），仅供参考。`
 
 4. **读取分析结果**：
    ```bash
    cat /tmp/bug_<bug_id>_analysis_*.json
    ```
+
+### 快速流程（MCP 手动分析）
+
+当环境变量不完整（缺少 LLM_API_KEY 等）时，Claude 将直接通过 MCP 工具 + 代码搜索执行手动分析：
+
+1. **获取 Bug 详情**：`get_workitem_brief(fields=["_all"])`
+2. **下载附件并提取日志**
+3. **搜索 nreal-code/ 相关代码**
+4. **编译分析报告并写入评论**
+
+### 评论格式要求（必需）
+
+无论使用哪种分析方式，写入飞书评论时**必须**遵循以下格式：
+
+- 标题必须为：`## 🔍 AI分析结论 (by Claude Code + {模型名称})`
+- 模型名称从 `config.yaml` 的 `llm.model` 读取（如 `deepseek-v4-pro`）
+- **必须包含置信度评估章节**（评分制，非星级制），格式：
+  ```markdown
+  ### 置信度评估
+  
+  | 维度 | 得分 | 说明 |
+  |------|------|------|
+  | 日志完整性 | x.xx/0.10 | 日志覆盖情况说明 |
+  | 错误明确性 | x.xx/0.10 | 错误码/异常指向性说明 |
+  | 根因确定性 | x.xx/0.15 | 代码定位精度说明 |
+  
+  **综合：🟢/🟡/🔴 x.xx（高/中/低置信度）**
+  ```
+  - 综合得分 = 三维度之和，满分 0.35
+  - 等级：🟢 高 (≥0.30) | 🟡 中 (0.20-0.29) | 🔴 低 (<0.20)
+  - **禁止使用**星级（⭐⭐⭐⭐⭐）或百分比替代
+- 必须包含「证据链」章节（直接证据 / 间接证据 / 辅助证据）
+- 末尾标注：`> ⚠️ 此分析来源于 AI（Claude Code + {模型名称}），仅供参考。`
+
+完整格式规范见 `references/report-format.md`。
 
 ### 自定义参数
 
