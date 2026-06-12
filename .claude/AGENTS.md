@@ -17,7 +17,7 @@
   - 批量获取缺陷列表、详情（含完整字段）、评论数据、附件信息
   - 通过 MCP 向缺陷追加/删除评论（含 @人员、图片、附件格式）
 
-## nreal-code
+## code-fetcher
 
 - **Path**: `.claude/skills/nreal-code`
-- **Description**: 管理 nreal-code 目录下的 8 个代码仓库（dove、ferrit、framework、heron、leopard、ov580_driver、project、sparrow），支持更新仓库和查看提交记录。
+- **Description**: 管理 nreal-code 目录下的 11 个代码仓库，支持更新和查看提交记录。
