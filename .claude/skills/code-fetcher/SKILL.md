@@ -41,7 +41,7 @@ description: |
 ## 执行脚本
 
 ```bash
-cd .claude/skills/nreal-code
+cd .claude/skills/code-fetcher
 python3 update_code.py update [all|dove|ferrit|framework|leopard|project|sparrow ...]
 python3 update_code.py log <仓库别名> <数量>
 ```

@@ -198,7 +198,7 @@ BugInsight/
 ├── .claude/
 │   ├── skills/
 │   │   ├── bug_analysis/          # 飞书缺陷端到端分析
-│   │   └── nreal-code/           # 仓库更新 + 提交查看
+│   │   └── code-fetcher/           # 仓库更新 + 提交查看
 │   ├── scripts/
 │   │   ├── delete_comment.py     # 删除飞书评论（Direct API）
 │   │   └── fetch_bug_log.sh      # 下载缺陷附件

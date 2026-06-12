@@ -11,5 +11,5 @@
 
 ## code-fetcher
 
-- **Path**: `.claude/skills/nreal-code`
+- **Path**: `.claude/skills/code-fetcher`
 - **Description**: 管理 nreal-code 目录下的 11 个代码仓库，支持更新和查看提交记录。

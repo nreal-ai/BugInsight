@@ -6,7 +6,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-BASE = Path(__file__).resolve().parent.parent.parent.parent  # .claude/skills/nreal-code -> project root
+BASE = Path(__file__).resolve().parent.parent.parent.parent  # .claude/skills/code-fetcher -> project root
 CODE_DIR = BASE / "nreal-code"
 
 REPOS = {
