@@ -850,8 +850,6 @@ def generate_feishu_report(analysis_result: Dict, bug_info: Dict = None) -> str:
     if ti.get('has_timing_issue'):
         p1.append(f"• 时序问题：{ti.get('issue_count', len(ti.get('issues', [])))}个 ({', '.join(ti.get('issue_types', []))})")
 
-    code_str = ", ".join(list({ec["code"] for ec in log_analysis.get("error_codes", [])})[:5]) or "无"
-
     # 模型名称
     model_name = "unknown"
     try:
@@ -901,12 +899,6 @@ def generate_feishu_report(analysis_result: Dict, bug_info: Dict = None) -> str:
             report += f"• ⚪ {ev['type']}: {ev['content'][:100]}\n"
 
     report += f"""
-■ 日志统计
-• 致命错误：{log_analysis.get('fatal_count', 0)}
-• 错误：{log_analysis.get('error_count', 0)}
-• 警告：{log_analysis.get('warning_count', 0)}
-• 错误码：{code_str}
-
 ■ 分析耗时
 {analysis_result.get('analysis_duration_str', '未知')}
 
