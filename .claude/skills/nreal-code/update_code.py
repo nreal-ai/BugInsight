@@ -20,6 +20,7 @@ REPOS = {
     "heron": {"dir": "nreal-heron", "remote": "git@github.com:nreal-ai/heron.git", "branch": "develop"},
     "xr_codec": {"dir": "nreal-xr_codec", "remote": "git@github.com:nreal-ai/xr_codec.git", "branch": "develop"},
     "nrsdkrepo": {"dir": "nreal-nrsdkrepo", "remote": "git@github.com:nreal-ai/nrsdkrepo.git", "branch": "master"},
+    "util": {"dir": "nrealUtil", "remote": "git@github.com:nreal-ai/nrealUtil.git", "branch": "develop"},
 }
 
 

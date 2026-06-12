@@ -1,5 +1,5 @@
 ---
-name: nreal-code
+name: nreal-code-manager
 description: |
   管理 nreal-code 目录下的代码仓库。支持更新仓库、查看最近 N 次提交记录（含作者和时间）。
   可用仓库: dove, ferrit, framework, leopard, ov580_driver, project, sparrow, heron, util, xr_codec, nrsdkrepo

@@ -1,6 +1,6 @@
 # BugInsight
 
-AI 驱动的 Bug 分析工程。集中管理 NReal 十一个子仓库参考代码（dove、ferrit、framework、heron、leopard、ov580_driver、project、sparrow、nrealUtil、xr_codec、nrsdkrepo），配合 bug_analysis 和 nreal-code 两个 Claude Code 技能自动化分析缺陷根因。
+AI 驱动的 Bug 分析工程。集中管理 NReal 十一个子仓库参考代码（dove、ferrit、framework、heron、leopard、ov580_driver、project、sparrow、nrealUtil、xr_codec、nrsdkrepo），配合 bug_analysis 和 nreal-code-manager 两个 Claude Code 技能自动化分析缺陷根因。
 
 ## 目录结构
 
@@ -28,7 +28,7 @@ BugInsight/
 
 ## 可用技能
 
-### nreal-code
+### nreal-code-manager
 
 管理 nreal-code 目录下的代码仓库，支持更新和查看提交记录。
 
