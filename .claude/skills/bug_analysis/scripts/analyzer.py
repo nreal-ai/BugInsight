@@ -3098,7 +3098,7 @@ class BugAnalyzer:
             'backtrace', 'sanitizer', 'asan', 'ubsan', 'tsan'
         ]
         error_keywords = [
-            'FATAL', 'ERROR', 'SIGSEGV', 'SIGABRT', 'SIGBUS',
+            'FATAL', 'ERROR', 'FAIL', 'SIGSEGV', 'SIGABRT', 'SIGBUS',
             'NullPointerException', 'IndexOutOfBounds', 'ANR',
             'AddressSanitizer', 'use-after-free', 'heap-buffer-overflow',
             'stack-overflow', 'double-free', 'LEAK', 'segfault'
@@ -3182,7 +3182,7 @@ class BugAnalyzer:
             return 0
         count = 0
         content_upper = content.upper()
-        for kw in ['FATAL', 'ERROR', 'EXCEPTION', 'CRASH', 'SIGSEGV', 'SIGABRT', 'ANR']:
+        for kw in ['FATAL', 'ERROR', 'FAIL', 'EXCEPTION', 'CRASH', 'SIGSEGV', 'SIGABRT', 'ANR']:
             count += content_upper.count(kw)
         return count
 
