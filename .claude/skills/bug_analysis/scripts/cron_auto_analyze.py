@@ -607,7 +607,7 @@ def get_bug_info(bugs, bug_id):
 
 
 def check_ai_comment(bug_id, project_key):
-    """Check if bug already has an [AI分析] comment"""
+    """Check if bug already has an AI analysis comment (by Claude Code)"""
     result, err = mcp_call(
         "list_workitem_comments",
         {"work_item_id": bug_id, "project_key": project_key, "page_num": 1},
@@ -622,7 +622,7 @@ def check_ai_comment(bug_id, project_key):
         comments = result.get("comments", [])
         for c in comments:
             content = c.get("content", "")
-            if "[AI分析]" in content:
+            if "by Claude Code" in content:
                 return True
     except (json.JSONDecodeError, KeyError):
         pass
@@ -944,7 +944,7 @@ def main():
 
         # Check for existing AI comment
         if check_ai_comment(bug_id, project_key):
-            print(f"  [SKIP] 已有 [AI分析] 评论")
+            print(f"  [SKIP] 已有 AI分析结论 (by Claude Code) 评论")
             _remove_from_retry(bug_id)  # already commented, remove from retry
             results.append({"bug_id": bug_id, "project_key": project_key, "status": "skipped", "reason": "已有AI评论"})
             continue
