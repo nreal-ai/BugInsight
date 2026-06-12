@@ -38,7 +38,7 @@ LLM_API_KEY=<与LITELLM_API_KEY相同值>
 
 ## LLM 错误检测（防止误报成功）
 
-`bug_analyzer.py` 即使 LLM 401 也会 exit_code 0。必须在 `cron_auto_analyze.py` 中检测：
+`bug_analyzer.py` 即使 LLM 401 也会 exit_code 0。必须在 `Cron 自动分析任务` 中检测：
 
 ```python
 # run_analysis() 中

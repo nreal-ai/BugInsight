@@ -90,48 +90,39 @@ echo $GITHUB_TOKEN  # GitHub Token（代码搜索必需）
 
 ---
 
-## Mode 2: 定时自动分析（Cron）
+## Mode 2: 自动分析（Cron + MCP 原生）
 
-**触发**：用户说"设置缺陷自动分析"、"setup bug cron"、"每 N 小时自动分析飞书新缺陷"
+**触发**：用户说"开始自动分析"、"启动自动分析"、"设置缺陷自动分析"
 
 ### 设置流程
 
-1. **确认项目列表**：`scripts/cron_auto_analyze.py` 中 `PROJECT_KEYS` 默认为 `["sw_team", "676e7fecad8e9de8735fa89f"]`。如需修改告知用户。
-
-2. **创建 Cron 任务**：使用 Claude Code `CronCreate` 工具：
+1. 更新 `bug-auto-analyzer-config` memory 将 mode 设为 `auto`
+2. 创建 Cron 任务（每 10 分钟，Claude MCP 原生执行）：
    ```
    CronCreate(
-     cron: "7 */2 * * *",  // 每 2 小时，分钟避开 0/30 高峰
-     prompt: "Run bug_analysis cron: cd /Users/apple/WorkSpace/HermesBugInsight/.claude/skills/bug_analysis/scripts && python3 cron_auto_analyze.py. After completion, read /tmp/cron_auto_analyze_last_output.txt and summarize: how many new bugs found, analyzed, comments posted, errors.",
+     cron: "3,13,23,33,43,53 * * * *",
+     prompt: "执行自动分析扫描...",
      recurring: true
    )
    ```
-   根据用户要求的频率调整 cron 表达式。`durable: true` 可让任务跨 session 持久化。
+3. Cron 触发时 Claude 直接用 MCP 工具执行全流程：MQL 查询 → 附件下载 → 代码搜索 → 分析 → 写评论
 
-3. **查看历史运行记录**：
-   ```bash
-   tail -100 /tmp/cron_auto_analyze_history.log
-   ```
+### 停止
 
-### Cron 工作流程
+1. `CronDelete` 删除 Cron
+2. memory 切回 `manual`
 
-```
-cron_auto_analyze.py 执行：
-  1. MCP JSON-RPC 分页查询全部 OPEN 缺陷
-  2. 对比本地缓存找新增 Bug
-  3. 跳过已有 [AI分析] 评论的 Bug
-  4. 跳过附件过多（>15）或 ZIP 过多（≥3）的 Bug
-  5. 对每个新 Bug：运行 bug_analyzer.py --llm（带 900s 超时 + 600s 卡死检测）
-  6. 通过 MCP JSON-RPC 回写 [AI分析] 评论
-  7. 检测已关闭 Bug → 导入 OpenViking 向量库
-  8. 写汇总到 /tmp/cron_auto_analyze_last_output.txt
-```
+### 跳过规则
 
-### Cron 限制
+- 评论含 `by Claude Code` → 已分析过，跳过
+- 已在 `analyzed_bugs` 列表中 → 跳过
+- 附件 >15 个或 ZIP ≥3 个 → 跳过
 
-- **仅检测新增 OPEN Bug**：不检测已有 Bug 的新评论
-- **Session 内有效**：CronCreate 任务在 Claude Code session 结束时会停止（除非 `durable: true` 可用）
-- **重试机制**：失败的 Bug 自动加入重试队列（最多 2 次），下次运行时自动重试
+### 限制
+
+- **Session 内有效**：Cron 在 Claude Code session 结束时会停止
+- **仅检测未解决 Bug**：状态 OPEN/IN PROGRESS/REOPENED
+- **30 天内**：只扫描最近 30 天创建的 Bug
 
 ---
 
@@ -153,7 +144,6 @@ cron_auto_analyze.py 执行：
 | 脚本 | 功能 | 用法 |
 |------|------|------|
 | `bug_analyzer.py` | 单 Bug 分析入口 | `python3 bug_analyzer.py feishu <id> --llm` |
-| `cron_auto_analyze.py` | 定时自动批量分析 | `python3 cron_auto_analyze.py` |
 | `analyzer.py` | LLM 分析核心引擎 | 由 bug_analyzer 调用 |
 | `attachment_downloader.py` | 附件下载+日志提取 | 由 bug_analyzer 调用 |
 | `code_search.py` | 跨仓库代码搜索（使用 nreal-code/） | 由 analyzer 调用 |
@@ -165,7 +155,6 @@ cron_auto_analyze.py 执行：
 ## 关键参考文档
 
 - `references/pipeline-architecture.md` — 完整分析流水线架构
-- `references/cron-pipeline.md` — Cron 定时任务详解
 - `references/source-resolution.md` — 代码版本-仓库映射策略
 - `references/platform-detection-repo-filtering.md` — 平台检测与仓库过滤
 - `references/report-format.md` — 分析报告格式规范

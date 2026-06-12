@@ -5,7 +5,7 @@ An OPEN bug appears as `closed_bug_{id}.md` in `~/.openviking/workspace/feishu-b
 
 ## Root Cause
 
-`cron_auto_analyze.py` line 189-227, `get_closed_bug_ids()`:
+`Cron 自动分析任务` line 189-227, `get_closed_bug_ids()`:
 
 ```python
 # Bugs that were OPEN in cache but are no longer in current OPEN list = closed

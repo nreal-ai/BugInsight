@@ -18,7 +18,7 @@
 
 Replace mcporter CLI with direct MCP JSON-RPC calls + OFFSET pagination.
 
-### Key Functions (added to cron_auto_analyze.py)
+### Key Functions (added to Cron 自动分析任务)
 
 ```python
 MCP_URL = "https://project.feishu.cn/mcp_server/v1"

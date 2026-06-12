@@ -88,7 +88,7 @@ Noise patterns (filtered out):
 
 ## Cron Limitation
 
-`cron_auto_analyze.py` only detects NEW OPEN bugs (ID comparison against cache).
+`Cron 自动分析任务` only detects NEW OPEN bugs (ID comparison against cache).
 It does NOT:
 - Detect new comments on existing bugs
 - Re-analyze bugs that already have [AI分析] comments
