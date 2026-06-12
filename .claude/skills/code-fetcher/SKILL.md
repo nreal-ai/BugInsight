@@ -31,12 +31,14 @@ description: |
 
 | 用户说法 | 行为 |
 |---------|------|
-| "更新代码" / "更新全部" / "都更新" | 更新所有 8 个仓库 |
+| "更新代码" / "更新全部" / "都更新" | 更新所有仓库 + BugInsight 自身 |
 | "更新 dove" | 只更新 dove |
 | "更新 dove 和 framework" | 更新 dove + framework |
 | "更新 ferrit" | 更新 ferrit + submodule |
 | "查看 ferrit 最近 5 次提交" | 显示 ferrit 最近 5 次提交（含作者、时间） |
 | "查看 dove 最近 N 次提交" | 显示 dove 最近 N 次提交 |
+
+> **注意**：执行"更新代码"时，除了更新 nreal-code/ 下的各个子仓库，还会自动 `git pull` BugInsight 自身仓库的最新代码。
 
 ## 执行脚本
 
@@ -66,6 +68,7 @@ python3 update_code.py log <仓库别名> <数量>
 [✓] dove       develop  已是最新
 [✓] ferrit     develop  更新了 3 个提交 (submodules synced)
 [✗] leopard    develop  远程连接失败
+[✓] BugInsight          main      已是最新
 ```
 
 ### 提交记录

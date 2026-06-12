@@ -146,6 +146,28 @@ def cmd_update(args):
     print(f"更新 {len(targets)} 个仓库:\n")
     for name in targets:
         print(update_repo(name, REPOS[name]))
+
+    # 同步更新 BugInsight 自身仓库
+    print()
+    try:
+        os.chdir(BASE)
+        result = subprocess.run(
+            ["git", "pull"],
+            capture_output=True, text=True, timeout=60,
+        )
+        if result.returncode == 0:
+            if "Already up to date" in result.stdout:
+                print("[✓] BugInsight         main      已是最新")
+            else:
+                print("[✓] BugInsight         main      已更新")
+        else:
+            err = result.stderr.strip().split("\n")[-1] if result.stderr else "unknown"
+            print(f"[✗] BugInsight         main      pull 失败: {err}")
+    except subprocess.TimeoutExpired:
+        print("[✗] BugInsight         main      超时")
+    except Exception as e:
+        print(f"[✗] BugInsight         main      {e}")
+
     print()
 
 
