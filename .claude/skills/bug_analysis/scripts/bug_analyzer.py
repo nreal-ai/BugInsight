@@ -582,7 +582,12 @@ class BugAnalyzerCLI:
         minutes = int((elapsed % 3600) // 60)
         seconds = int(elapsed % 60)
         result['analysis_duration_seconds'] = round(elapsed, 1)
-        result['analysis_duration_str'] = f"{hours}小时{minutes}分{seconds}秒"
+        if hours > 0:
+            result['analysis_duration_str'] = f"{hours}小时{minutes}分{seconds}秒"
+        elif minutes > 0:
+            result['analysis_duration_str'] = f"{minutes}分{seconds}秒"
+        else:
+            result['analysis_duration_str'] = f"{seconds}秒"
         print(f"\n⏱ 分析耗时: {result['analysis_duration_str']}")
 
         # Save
