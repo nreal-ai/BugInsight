@@ -102,7 +102,7 @@ def fetch_bugs(project_key):
             break
 
         for item in items:
-            fields = _parse_moql_field_list(item.get("moql_field_list", []))
+            fields = parse_moql_field_list(item.get("moql_field_list", []))
             fields["_project_key"] = project_key
             all_bugs.append(fields)
 
@@ -651,7 +651,7 @@ def fetch_new_bug_details(bug_id, project_key):
             print(f"  [WARN] No data returned for bug {bug_id}")
             return False
 
-        fields = _parse_moql_field_list(bug_data[0].get("moql_field_list", []))
+        fields = parse_moql_field_list(bug_data[0].get("moql_field_list", []))
 
         # Add to cache
         if os.path.exists(CACHE_PATH):
