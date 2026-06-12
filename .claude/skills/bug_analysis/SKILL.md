@@ -51,7 +51,11 @@ echo $GITHUB_TOKEN  # GitHub Token（代码搜索必需）
    ```
    mcp__FeishuProjectMcp__add_comment(work_item_id="<bug_id>", project_key="sw_team", content="<分析报告>")
    ```
-   评论以 `[AI分析]` 前缀标记。
+   **评论格式要求**：
+   - 标题必须为：`## 🔍 AI分析结论 (by Claude Code + {模型名称})`
+   - 模型名称从 `config.yaml` 的 `llm.model` 读取（如 `deepseek-v4-pro`）
+   - 必须包含置信度评估章节，格式见 `references/report-format.md`
+   - 末尾标注：`> ⚠️ 此分析来源于 AI（Claude Code + {模型名称}），仅供参考。`
 
 4. **读取分析结果**：
    ```bash

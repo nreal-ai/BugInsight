@@ -669,9 +669,19 @@ def generate_markdown_report(analysis_result: Dict, bug_info = None) -> str:
     evidence_chain = _build_evidence_chain(analysis_result)
     source_lookup = _build_source_lookup(analysis_result)
 
-    report = f"""# 🐛 Bug 分析报告
+    # 模型名称：从 config 读取，fallback 到环境变量
+    model_name = "unknown"
+    try:
+        from config import get_llm_config
+        llm_cfg = get_llm_config()
+        model_name = llm_cfg.get("model", "unknown")
+    except Exception:
+        import os
+        model_name = os.environ.get("LLM_MODEL", "unknown")
 
-## 核心结论
+    report = f"""## 🔍 AI分析结论 (by Claude Code + {model_name})
+
+### 核心结论
 
 | 项目 | 内容 |
 |------|------|
@@ -804,6 +814,7 @@ def generate_markdown_report(analysis_result: Dict, bug_info = None) -> str:
         report += "\n"
 
     report += "</details>\n\n"
+    report += f"> ⚠️ 此分析来源于 AI（Claude Code + {model_name}），仅供参考。\n"
     report += f"*报告生成于 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*\n"
 
     return report
@@ -841,7 +852,17 @@ def generate_feishu_report(analysis_result: Dict, bug_info: Dict = None) -> str:
 
     code_str = ", ".join(list({ec["code"] for ec in log_analysis.get("error_codes", [])})[:5]) or "无"
 
-    report = f"""【Bug分析报告】
+    # 模型名称
+    model_name = "unknown"
+    try:
+        from config import get_llm_config
+        llm_cfg = get_llm_config()
+        model_name = llm_cfg.get("model", "unknown")
+    except Exception:
+        import os
+        model_name = os.environ.get("LLM_MODEL", "unknown")
+
+    report = f"""## 🔍 AI分析结论 (by Claude Code + {model_name})
 
 ■ 核心结论
 • 缺陷ID：{bug_id}
@@ -888,6 +909,8 @@ def generate_feishu_report(analysis_result: Dict, bug_info: Dict = None) -> str:
 
 ■ 解决方案
 {suggestion}
+
+> ⚠️ 此分析来源于 AI（Claude Code + {model_name}），仅供参考。
 """
     return report
 
